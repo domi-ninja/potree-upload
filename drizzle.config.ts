@@ -8,5 +8,6 @@ export default {
 	dbCredentials: {
 		url: env.DATABASE_URL,
 	},
-	tablesFilter: ["potree-upload_*"],
+	// tablesFilter: ["potree-upload_*"],
 } satisfies Config;
+

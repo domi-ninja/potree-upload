@@ -11,12 +11,13 @@ import { env } from "~/env";
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const createTable = pgTableCreator((name) => `potree-upload_${name}`);
+export const createTable = pgTableCreator((name) => `${name}`);
 
 export const uploads = createTable(
 	"upload",
 	(d) => ({
 		id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
+		uuid: d.uuid().notNull().default(sql`gen_random_uuid()`),
 		title: d.varchar({ length: 1024 }).notNull(),
 		createdAt: d
 			.timestamp({ withTimezone: true })
