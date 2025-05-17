@@ -1,9 +1,21 @@
+import { SignedIn } from "@clerk/nextjs";
 import Link from "next/link";
+import { getMyUploads } from "~/server/queries";
+import FileUploadForm from "~/components/FileUploadForm";
 
-export default function HomePage() {
+export default async function HomePage() {
+	const uploads = await getMyUploads();
+
+	console.log(uploads);
+
 	return (
 		<main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-			<div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
+			<pre>{JSON.stringify(uploads, null, 2)}</pre>
+				<SignedIn>
+					<FileUploadForm />
+				</SignedIn>
+
+						<div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
 				<h1 className="font-extrabold text-5xl text-white tracking-tight sm:text-[5rem]">
 					Create <span className="text-[hsl(280,100%,70%)]">T3</span> App
 				</h1>
