@@ -14,6 +14,8 @@ export const env = createEnv({
 
 		S3_MASTER_KEY_ID: z.string(),
 		S3_MASTER_KEY_SECRET: z.string(),
+
+		NODE_ENV: z.string(),
 	},
 	
 	/**
@@ -36,10 +38,11 @@ export const env = createEnv({
 		DATABASE_URL: process.env.DATABASE_URL,
 		SUPABASE_URL: process.env.SUPABASE_URL,
 		SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY,
-		SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
-
+		
 		S3_MASTER_KEY_ID: process.env.S3_MASTER_KEY_ID,
 		S3_MASTER_KEY_SECRET: process.env.S3_MASTER_KEY_SECRET,
+
+		NODE_ENV: process.env.NODE_ENV,
 	},
 	/**
 	 * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
