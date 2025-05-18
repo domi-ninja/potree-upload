@@ -9,6 +9,11 @@ export const env = createEnv({
 	server: {
 		CLERK_SECRET_KEY: z.string(),
 		DATABASE_URL: z.string().url(),
+		SUPABASE_URL: z.string().url(),
+		SUPABASE_ANON_KEY: z.string(),
+
+		S3_MASTER_KEY_ID: z.string(),
+		S3_MASTER_KEY_SECRET: z.string(),
 	},
 	
 	/**
@@ -29,6 +34,12 @@ export const env = createEnv({
 		NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
 		CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
 		DATABASE_URL: process.env.DATABASE_URL,
+		SUPABASE_URL: process.env.SUPABASE_URL,
+		SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY,
+		SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
+
+		S3_MASTER_KEY_ID: process.env.S3_MASTER_KEY_ID,
+		S3_MASTER_KEY_SECRET: process.env.S3_MASTER_KEY_SECRET,
 	},
 	/**
 	 * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

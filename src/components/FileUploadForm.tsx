@@ -7,6 +7,8 @@ interface UploadResult {
   fileName: string;
   fileSize: number;
   fileType: string;
+  filePath?: string;
+  publicUrl?: string;
 }
 
 export default function FileUploadForm() {
@@ -99,6 +101,19 @@ export default function FileUploadForm() {
           <p>Upload successful!</p>
           <p className="text-sm mt-1">File: {uploadResult.fileName}</p>
           <p className="text-sm">Size: {Math.round(uploadResult.fileSize / 1024)} KB</p>
+          {uploadResult.publicUrl && (
+            <div className="mt-2">
+              <p className="text-sm font-semibold">Supabase Storage URL:</p>
+              <a 
+                href={uploadResult.publicUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-sm text-blue-300 hover:underline break-all"
+              >
+                {uploadResult.publicUrl}
+              </a>
+            </div>
+          )}
         </div>
       )}
     </div>
