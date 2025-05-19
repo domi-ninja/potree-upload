@@ -19,6 +19,8 @@ export const uploads = createTable(
 		id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
 		uuid: d.uuid().notNull().default(sql`gen_random_uuid()`),
 		title: d.varchar({ length: 1024 }).notNull(),
+		userId: d.varchar({ length: 1024 }).notNull(),
+		fileType: d.varchar({ length: 1024 }).notNull(),
 		createdAt: d
 			.timestamp({ withTimezone: true })
 			.default(sql`CURRENT_TIMESTAMP`)

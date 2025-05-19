@@ -2,9 +2,10 @@ import { currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { s3Client } from "~/lib/s3";
 import { PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
+import { db } from "~/server/db";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { env } from "~/env";
-
+import { uploads } from "~/server/db/schema";
 const BUCKET_NAME = `potree-upload-${env.NODE_ENV}`;
 
 export async function POST(request: Request) {
@@ -14,7 +15,7 @@ export async function POST(request: Request) {
 
     const user = await currentUser();
 
-    if (!user) {
+    if (!user || !user.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -25,8 +26,6 @@ export async function POST(request: Request) {
     // Convert the file to a buffer
     const buffer = Buffer.from(await file.arrayBuffer());
     
-    console.log(user.id);
-
     // Create a unique filename
     const fileName = `${user.id}_${Date.now()}`;
 
@@ -55,7 +54,17 @@ export async function POST(request: Request) {
       Key: fileName
     });
 
-    const publicUrl = await getSignedUrl(s3Client, getObjectCommand, { expiresIn: 3600 });
+    //const publicUrl = await getSignedUrl(s3Client, getObjectCommand, { expiresIn: 3600 });
+
+    const upload = {
+      title: file.name,
+      uuid: crypto.randomUUID(),
+      userId: user.id,
+      fileType: file.type,
+    };
+
+    const uploadResult = await db.insert(uploads).values(upload);
+    console.log(uploadResult);
 
     return NextResponse.json({ 
       success: true, 
@@ -63,7 +72,7 @@ export async function POST(request: Request) {
       fileSize: file.size,
       fileType: file.type,
       filePath: fileName,
-      publicUrl: publicUrl
+      publicUrl: upload.uuid,
     });
   } catch (error) {
     console.error("Upload error:", error);
