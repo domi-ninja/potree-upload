@@ -1,12 +1,23 @@
 import "server-only"
 import {db} from "./db"
 import { currentUser } from "@clerk/nextjs/server"
-import { eq } from "drizzle-orm"
+import { eq, desc } from "drizzle-orm"
 import { uploads } from "./db/schema"
 
 export async function getMyUploads(){
-    const uploads = await db.query.uploads.findMany();
-	return uploads;
+    const user = await currentUser();
+
+    if (!user) {
+        return [];
+    }
+
+    console.log(user);
+
+    const results = await db.query.uploads.findMany({
+        where: eq(uploads.userId, user.id),
+        orderBy: desc(uploads.createdAt)
+    });
+	return results;
 }
 
 export async function getUploadById(uuid: string){

@@ -8,6 +8,8 @@ import { env } from "~/env";
 import { uploads } from "~/server/db/schema";
 const BUCKET_NAME = `potree-upload-${env.NODE_ENV}`;
 
+const type="server-only"
+
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
@@ -26,8 +28,18 @@ export async function POST(request: Request) {
     // Convert the file to a buffer
     const buffer = Buffer.from(await file.arrayBuffer());
     
+    
+    const upload = {
+      title: file.name,
+      uuid: crypto.randomUUID(),
+      userId: user.id,
+      fileType: file.type,
+      createdAt: new Date(),
+    };
+
+
     // Create a unique filename
-    const fileName = `${user.id}_${Date.now()}`;
+    const fileName = `${user.id}_${upload.uuid}}`;
 
     // Create the upload command
     const uploadCommand = new PutObjectCommand({
@@ -55,13 +67,6 @@ export async function POST(request: Request) {
     });
 
     //const publicUrl = await getSignedUrl(s3Client, getObjectCommand, { expiresIn: 3600 });
-
-    const upload = {
-      title: file.name,
-      uuid: crypto.randomUUID(),
-      userId: user.id,
-      fileType: file.type,
-    };
 
     const uploadResult = await db.insert(uploads).values(upload);
     console.log(uploadResult);
