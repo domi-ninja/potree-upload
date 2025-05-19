@@ -17,7 +17,7 @@ export default async function FilePage({params}: {params: {fileId: string}}) {
             <p>{file.createdAt.toLocaleString()}</p>
             <p>{file.uuid}</p>
             <p>{file.userId}</p>
-            <img src={`/file/contents/${file.uuid}`} alt={file.title} />
+            <img src={`/api/files/${file.uuid}/contents`} alt={file.title} />
         </div>
     )
 }

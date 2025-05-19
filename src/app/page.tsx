@@ -58,74 +58,71 @@ export default async function FilesPage() {
       </SignedOut>
 
       <SignedIn>
-        {uploads.length === 0 ? (
-          <div className="bg-slate-100 p-8 rounded-lg text-center">
-            <h2 className="text-xl font-medium mb-2">No files uploaded yet</h2>
-            <p className="text-slate-600 mb-4">
-              Upload your first file from the home page
-            </p>
-            <Link
-              href="/"
-              className="inline-block bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-md transition-colors"
-            >
-              Go to Upload
-            </Link>
-          </div>
-        ) : (
-          <div className="bg-white shadow rounded-lg overflow-hidden">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    File Name
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Type
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Uploaded
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {uploads.map((file) => (
-                  <tr key={file.uuid} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">
-                        {file.title}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">
-                        {file.fileType}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">
-                        {formatDate(file.createdAt)}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <Link
-                        href={`/files/${file.uuid}`}
-                        className="text-purple-600 hover:text-purple-900 mr-4"
-                      >
-                        View
-                      </Link>
-                    </td>
+        {/* File Upload Form */}
+        <FileUploadForm />
+        
+        <div className="mt-10">
+          <h2 className="text-2xl font-semibold mb-4">My Uploads</h2>
+          
+          {uploads.length === 0 ? (
+            <div className="bg-slate-100 p-8 rounded-lg text-center">
+              <h2 className="text-xl font-medium mb-2">No files uploaded yet</h2>
+              <p className="text-slate-600 mb-4">
+                Use the upload form above to add your first file
+              </p>
+            </div>
+          ) : (
+            <div className="bg-white shadow rounded-lg overflow-hidden">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      File Name
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Type
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Uploaded
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Actions
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-
-      <FileUploadForm />
-
-
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {uploads.map((file) => (
+                    <tr key={file.uuid} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">
+                          {file.title}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-500">
+                          {file.fileType}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-500">
+                          {formatDate(file.createdAt)}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <Link
+                          href={`/files/${file.uuid}`}
+                          className="text-purple-600 hover:text-purple-900 mr-4"
+                        >
+                          View
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
       </SignedIn>
     </main>
   );

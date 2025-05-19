@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface UploadResult {
   success: boolean;
@@ -16,6 +17,7 @@ export default function FileUploadForm() {
   const [uploading, setUploading] = useState(false);
   const [uploadResult, setUploadResult] = useState<UploadResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -53,6 +55,11 @@ export default function FileUploadForm() {
       }
       
       setUploadResult(result);
+      
+      // Refresh the page after successful upload
+      setTimeout(() => {
+        router.refresh();
+      }, 1500); // Small delay to show success message
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Upload failed');
     } finally {
@@ -92,28 +99,13 @@ export default function FileUploadForm() {
       
       {error && (
         <div className="mt-4 p-3 bg-red-100 text-red-800 rounded-md">
-          {error}
+          {error}storage
         </div>
       )}
       
       {uploadResult && (
         <div className="mt-4 p-3 bg-green-100 text-green-800 rounded-md">
           <p>Upload successful!</p>
-          <p className="text-sm mt-1">File: {uploadResult.fileName}</p>
-          <p className="text-sm">Size: {Math.round(uploadResult.fileSize / 1024)} KB</p>
-          {uploadResult.publicUrl && (
-            <div className="mt-2">
-              <p className="text-sm font-semibold">Supabase Storage URL:</p>
-              <a 
-                href={uploadResult.publicUrl} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-sm text-blue-600 hover:underline break-all"
-              >
-                {uploadResult.publicUrl}
-              </a>
-            </div>
-          )}
         </div>
       )}
     </div>
