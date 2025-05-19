@@ -11,8 +11,6 @@ export async function getMyUploads() {
 		return [];
 	}
 
-	console.log(user);
-
 	const results = await db.query.uploads.findMany({
 		where: eq(uploads.userId, user.id),
 		orderBy: desc(uploads.createdAt),

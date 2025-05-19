@@ -70,18 +70,12 @@ export default function FileUploadForm({ onUpload }: { onUpload: () => void }) {
 			<h2 className="mb-4 font-semibold text-gray-800 text-xl">Upload File</h2>
 
 			<form onSubmit={handleSubmit} className="flex flex-row items-end gap-4">
-				<label
-					htmlFor="file"
-					className="block py-4 font-medium text-gray-700 text-sm"
-				>
-					Select a file
-				</label>
 				<div className="flex-1">
 					<input
 						type="file"
 						id="file"
 						onChange={handleFileChange}
-						className="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+						className="file:mr-4 file:p-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 w-full text-sm text-slate-500 rounded-md border border-gray-300 bg-gray-50"
 					/>
 				</div>
 

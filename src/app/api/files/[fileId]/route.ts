@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 import { currentUser } from "@clerk/nextjs/server";
 import { BUCKET_NAME } from "~/lib/s3";
 import { deleteFile } from "~/server/queries";
+import { getFileName } from "./contents/route";
 
 export async function DELETE(
 	request: Request,
@@ -24,11 +25,12 @@ export async function DELETE(
 		return NextResponse.json({ error: "File not found" }, { status: 404 });
 	}
 
+    const fileName = getFileName(user.id, fileRecord);
     try {
         // delete the file from s3
         s3Client.send(new DeleteObjectCommand({
             Bucket: BUCKET_NAME,
-            Key: fileRecord.uuid,
+            Key: fileName,
         }));
     } catch (error) {
         console.error(error);
