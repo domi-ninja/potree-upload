@@ -199,6 +199,9 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 								/>
 							</th>
 							<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
+								View
+							</th>
+							<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
 								<button
 									type="button"
 									className="flex items-center focus:outline-none"
@@ -218,7 +221,9 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 									Uploaded {getSortIcon("createdAt")}
 								</button>
 							</th>
-							<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider"></th>
+							<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
+								
+							</th>
 						</tr>
 					</thead>
 					<tbody className="divide-y divide-gray-200 bg-white">
@@ -231,6 +236,14 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 										checked={selectedFiles.has(file.uuid)}
 										onChange={() => toggleFileSelection(file.uuid)}
 									/>
+								</td>
+								<td className="whitespace-nowrap">
+									<Link
+										href={`/files/${file.uuid}`}
+										className="bg-purple-600 p-4 text-white"
+									>
+										View
+									</Link>
 								</td>
 								<td className="whitespace-nowrap px-6 py-4">
 									<div className="font-medium text-gray-900 text-sm">
@@ -293,14 +306,6 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 									<div className="text-gray-500 text-sm">
 										{formatDate(file.createdAt)}
 									</div>
-								</td>
-								<td className="whitespace-nowrap px-6 py-4">
-									<Link
-										href={`/files/${file.uuid}`}
-										className="text-purple-600 hover:text-purple-900"
-									>
-										View
-									</Link>
 								</td>
 							</tr>
 						))}
