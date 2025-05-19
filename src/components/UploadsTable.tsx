@@ -283,7 +283,7 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 										View
 									</Link>
 								</td>
-								<td className="whitespace-nowrap px-6 py-4">
+								<td className="whitespace-nowrap">
 									<div className="font-medium text-gray-900 text-sm">
 										{editingFile === file.uuid ? (
 											<div className="flex items-center">
@@ -298,7 +298,7 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 															handleEditCancel();
 														}
 													}}
-													className="mr-2 flex-1 rounded border border-gray-300 p-4 text-sm"
+													className="flex-1 rounded border border-gray-300 p-4 text-sm"
 													id={`edit-title-${file.uuid}`}
 													ref={inputRef}
 												/>
@@ -342,12 +342,12 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 									</div>
 								</td>
 
-								<td className="whitespace-nowrap px-6 py-4">
+								<td className="whitespace-nowrap">
 									<div className="text-gray-500 text-sm">
 										{formatDate(file.createdAt)}
 									</div>
 								</td>
-								<td className="whitespace-nowrap px-6 py-4">
+								<td className="whitespace-nowrap">
 									<button
 										type="button"
 										onClick={() => handleDeleteFile(file.uuid)}
