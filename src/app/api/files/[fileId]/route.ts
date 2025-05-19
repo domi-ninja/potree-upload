@@ -24,11 +24,15 @@ export async function DELETE(
 		return NextResponse.json({ error: "File not found" }, { status: 404 });
 	}
 
-    // delete the file from s3
-    s3Client.send(new DeleteObjectCommand({
-        Bucket: BUCKET_NAME,
-        Key: fileRecord.uuid,
-    }));
+    try {
+        // delete the file from s3
+        s3Client.send(new DeleteObjectCommand({
+            Bucket: BUCKET_NAME,
+            Key: fileRecord.uuid,
+        }));
+    } catch (error) {
+        console.error(error);
+    }
 
 	await deleteFile(fileRecord.uuid);
 

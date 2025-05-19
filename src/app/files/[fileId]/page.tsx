@@ -4,12 +4,20 @@ export default async function FilePage({
 	params,
 }: { params: { fileId: string } }) {
 	const { fileId } = await params;
+    let file: Awaited<ReturnType<typeof getMyUploadById>>;
 
-	const file = await getMyUploadById(fileId);
-
-	if (!file) {
-		return <div>File not found</div>;
-	}
+    try {
+	    file = await getMyUploadById(fileId);
+    } catch (error) {
+        return (
+        <div className="text-red-500 flex flex-col items-center justify-center h-screen">
+            <h1 className="text-2xl font-bold">
+                {error instanceof Error ? error.message : String(error)}
+                </h1>
+                <a href="/" className="text-blue-500">Go back</a>
+            </div>
+            );
+    }
 
 	return (
 		<div>
