@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getMyUploads } from "~/server/queries";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
+import FileUploadForm from "~/components/FileUploadForm";
 
 // Helper function to format dates in a readable way
 function formatDate(dateString: string | Date): string {
@@ -127,6 +128,10 @@ export default async function FilesPage() {
             </table>
           </div>
         )}
+
+      <FileUploadForm />
+
+
       </SignedIn>
     </main>
   );

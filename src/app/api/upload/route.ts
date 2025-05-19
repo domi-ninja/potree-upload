@@ -39,7 +39,7 @@ export async function POST(request: Request) {
 
 
     // Create a unique filename
-    const fileName = `${user.id}_${upload.uuid}}`;
+    const fileName = `${user.id}_${upload.uuid}`;
 
     // Create the upload command
     const uploadCommand = new PutObjectCommand({
@@ -59,12 +59,6 @@ export async function POST(request: Request) {
         { status: 500 }
       );
     }
-
-    // Generate a signed URL to access the file (valid for 1 hour)
-    const getObjectCommand = new GetObjectCommand({
-      Bucket: BUCKET_NAME,
-      Key: fileName
-    });
 
     //const publicUrl = await getSignedUrl(s3Client, getObjectCommand, { expiresIn: 3600 });
 

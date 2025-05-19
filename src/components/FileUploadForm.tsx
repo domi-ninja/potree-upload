@@ -61,29 +61,29 @@ export default function FileUploadForm() {
   };
   
   return (
-    <div className="p-4 bg-slate-800 rounded-lg shadow-md w-full max-w-md">
-      <h2 className="text-xl font-semibold mb-4">Upload File</h2>
+    <div className="p-4 bg-white rounded-lg shadow-md w-full mt-10">
+      <h2 className="text-xl font-semibold mb-4 text-gray-800">Upload File</h2>
       
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-2">
-          <label htmlFor="file" className="block text-sm font-medium">
+      <form onSubmit={handleSubmit} className="flex flex-row items-end gap-4">
+        <label htmlFor="file" className="block text-sm font-medium text-gray-700 py-4">
             Select a file
           </label>
+        <div className="flex-1">
           <input
             type="file"
             id="file"
             onChange={handleFileChange}
-            className="w-full text-sm border border-slate-600 rounded-md bg-slate-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full text-sm border border-gray-300 rounded-md bg-gray-50 px-3 py-4 focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
         </div>
         
-        <button
+        <button 
           type="submit"
           disabled={uploading || !file}
-          className={`w-full py-2 px-4 rounded-md text-white font-medium ${
+          className={`px-8 py-4 rounded-md font-medium ${
             uploading || !file
               ? 'bg-purple-700 opacity-50 cursor-not-allowed'
-              : 'bg-purple-600 hover:bg-purple-700'
+              : 'bg-purple-600 hover:bg-purple-700 text-white'
           }`}
         >
           {uploading ? 'Uploading...' : 'Upload'}
@@ -91,13 +91,13 @@ export default function FileUploadForm() {
       </form>
       
       {error && (
-        <div className="mt-4 p-3 bg-red-900 text-white rounded-md">
+        <div className="mt-4 p-3 bg-red-100 text-red-800 rounded-md">
           {error}
         </div>
       )}
       
       {uploadResult && (
-        <div className="mt-4 p-3 bg-green-900 text-white rounded-md">
+        <div className="mt-4 p-3 bg-green-100 text-green-800 rounded-md">
           <p>Upload successful!</p>
           <p className="text-sm mt-1">File: {uploadResult.fileName}</p>
           <p className="text-sm">Size: {Math.round(uploadResult.fileSize / 1024)} KB</p>
@@ -108,7 +108,7 @@ export default function FileUploadForm() {
                 href={uploadResult.publicUrl} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="text-sm text-blue-300 hover:underline break-all"
+                className="text-sm text-blue-600 hover:underline break-all"
               >
                 {uploadResult.publicUrl}
               </a>
