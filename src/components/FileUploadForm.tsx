@@ -2,6 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface UploadResult {
 	success: boolean;
@@ -19,29 +21,39 @@ export default function FileUploadForm({ onUpload }: { onUpload: () => void }) {
 	const [error, setError] = useState<string | null>(null);
 	const router = useRouter();
 
-	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		const files = e.target.files;
 		if (files && files.length > 0) {
-			setFile(files[0] as File);
+			const selectedFile = files[0] as File;
+			setFile(selectedFile);
 			setError(null);
 			setUploadResult(null);
+			
+			// Trigger upload immediately
+			await uploadFile(selectedFile);
+			
+			// Clear file input
+			e.target.value = '';
 		}
 	};
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
-
-		if (!file) {
+	const uploadFile = async (fileToUpload: File) => {
+		if (!fileToUpload) {
 			setError("Please select a file to upload");
+			toast.error("Please select a file to upload");
 			return;
 		}
 
 		setUploading(true);
 		setError(null);
+		toast.info(`Uploading ${fileToUpload.name}...`, { 
+			autoClose: false,
+			toastId: "uploading"
+		});
 
 		try {
 			const formData = new FormData();
-			formData.append("file", file);
+			formData.append("file", fileToUpload);
 
 			const response = await fetch("/api/upload", {
 				method: "POST",
@@ -54,14 +66,26 @@ export default function FileUploadForm({ onUpload }: { onUpload: () => void }) {
 				throw new Error(result.error || "Upload failed");
 			}
 
+			toast.dismiss("uploading");
+			toast.success(`${fileToUpload.name} uploaded successfully!`);
 			setUploadResult(result);
-
-      onUpload();
+			setFile(null); // Clear file selection in state
+			onUpload();
 
 		} catch (err) {
-			setError(err instanceof Error ? err.message : "Upload failed");
+			const errorMessage = err instanceof Error ? err.message : "Upload failed";
+			toast.dismiss("uploading");
+			toast.error(errorMessage);
+			setError(errorMessage);
 		} finally {
 			setUploading(false);
+		}
+	};
+
+	const handleSubmit = async (e: React.FormEvent) => {
+		e.preventDefault();
+		if (file) {
+			await uploadFile(file);
 		}
 	};
 
@@ -76,33 +100,18 @@ export default function FileUploadForm({ onUpload }: { onUpload: () => void }) {
 						id="file"
 						onChange={handleFileChange}
 						className="file:mr-4 file:p-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 w-full text-sm text-slate-500 rounded-md border border-gray-300 bg-gray-50"
+						disabled={uploading}
 					/>
 				</div>
 
-				<button
-					type="submit"
-					disabled={uploading || !file}
-					className={`rounded-md px-8 py-4 font-medium ${
-						uploading || !file
-							? "cursor-not-allowed bg-purple-700 opacity-50"
-							: "bg-purple-600 text-white hover:bg-purple-700"
-					}`}
-				>
-					{uploading ? "Uploading..." : "Upload"}
-				</button>
 			</form>
 
 			{error && (
 				<div className="mt-4 rounded-md bg-red-100 p-3 text-red-800">
-					{error}storage
+					{error}
 				</div>
 			)}
 
-			{uploadResult && (
-				<div className="mt-4 rounded-md bg-green-100 p-3 text-green-800">
-					<p>Upload successful!</p>
-				</div>
-			)}
 		</div>
 	);
 }

@@ -14,6 +14,8 @@ import {
 } from "react-icons/fa";
 import FileUploadForm from "./FileUploadForm";
 import FilesToLink from "./FilesToLink";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Helper function to format dates in a readable way
 function formatDate(dateString: string | Date): string {
@@ -151,10 +153,18 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 
 	const handleDeleteFile = async (uuid: string) => {
 	
+		toast.info("Deleting file...", { 
+			autoClose: false,
+			toastId: "deleting"
+		});
+
 		// call the api to delete the file, no need to use fetch
 		await fetch(`/api/files/${uuid}`, {
 			method: "DELETE",
 		});
+
+		toast.dismiss("deleting");
+		toast.success("File deleted successfully!");
 
 		// refresh the page
 		router.refresh();
@@ -194,6 +204,8 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 
 	return (
 		<div>
+			<ToastContainer position="top-center" autoClose={5000} />
+
 			<div className="mb-12 grid grid-cols-2 gap-4">
 				<FileUploadForm onUpload={() => router.refresh()} />
 				<FilesToLink
@@ -205,8 +217,9 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 
 				<button
 					type="button"
+					disabled={selectedFiles.size === 0}
 					onClick={() => handleDeleteSelectedFiles()}
-					className="text-red-500 hover:text-red-700 float-right"
+					className="text-red-500 hover:text-red-700 float-right border border-red-500 rounded-md p-2 text-lg mb-4"
 					aria-label="Delete files"
 				>
 					Delete {selectedFiles.size} file{selectedFiles.size !== 1 ? "s" : ""}
