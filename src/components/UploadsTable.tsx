@@ -53,7 +53,7 @@ export type FileUpload = {
 type SortField = "title" | "fileType" | "createdAt";
 type SortDirection = "asc" | "desc";
 
-export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
+export default function UploadsTable({ uploads, admin }: { uploads: FileUpload[], admin: boolean }) {
 	const router = useRouter();
 	const [searchTerm, setSearchTerm] = useState("");
 	const [sortField, setSortField] = useState<SortField>("createdAt");
@@ -210,7 +210,9 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 			<ToastContainer position="top-center" autoClose={5000} />
 
 			<div className="mb-12 grid grid-cols-1 md:grid-cols-2 gap-4">
-				<FileUploadForm onUpload={() => router.refresh()} />
+				{ !admin &&
+					<FileUploadForm onUpload={() => router.refresh()} />
+				}
 				<FilesToLink
 					selectedFiles={Array.from(selectedFiles)}
 					uploads={uploads}

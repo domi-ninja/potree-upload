@@ -59,7 +59,7 @@ export default async function FilesPage() {
 			</SignedOut>
 
 			<SignedIn>
-				<UploadsTable uploads={uploads} />
+				<UploadsTable uploads={uploads} admin={false} />
 			</SignedIn>
 		</main>
 	);

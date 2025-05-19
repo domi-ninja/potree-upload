@@ -3,7 +3,7 @@ import "~/styles/globals.css";
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import AdminHeader from "~/components/AdminHeader";
-
+import Link from "next/link";
 import {
 	ClerkProvider,
 	SignInButton,
@@ -34,7 +34,7 @@ export default function RootLayout({
 				<body>
 					<header className="bg-gray-100 h-16 gap-4 p-4 text-2xl">
 						<div className="container mx-auto px-4">
-						<h1 className="text-2xl font-bold inline-block">Potree Viewer</h1>
+						<h1 className="text-2xl font-bold inline-block"><Link href="/">Potree Viewer</Link></h1>
 						<div className="float-right">
 							<SignedOut>
 								<SignInButton />

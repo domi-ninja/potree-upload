@@ -4,6 +4,7 @@ import { desc, eq } from "drizzle-orm";
 import { db } from "./db";
 import { uploads } from "./db/schema";
 
+
 export async function getMyUploads() {
 	const user = await currentUser();
 
@@ -13,6 +14,20 @@ export async function getMyUploads() {
 
 	const results = await db.query.uploads.findMany({
 		where: eq(uploads.userId, user.id),
+		orderBy: desc(uploads.createdAt),
+	});
+	return results;
+}
+
+
+export async function adminGetSomeUserUploads(userId: string) {
+
+	if (!userId) {
+		return [];
+	}
+
+	const results = await db.query.uploads.findMany({
+		where: eq(uploads.userId, userId),
 		orderBy: desc(uploads.createdAt),
 	});
 	return results;
