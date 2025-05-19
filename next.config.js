@@ -13,6 +13,18 @@ const config = {
 	eslint: {
 		ignoreDuringBuilds: true,
 	},
+	webpack: (config, { dev, isServer }) => {
+		// Keep console.log statements in production builds
+		config.optimization.minimize = true;
+		if(!dev) {
+			for (const minimizer of config.optimization.minimizer) {
+				if(minimizer.constructor.name === 'TerserPlugin') {
+					minimizer.options.terserOptions.compress.drop_console = false;
+				}
+			}
+		}
+		return config;
+	},
 };
 
 export default config;
