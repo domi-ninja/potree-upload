@@ -46,6 +46,7 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 	const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
 	const [editingFile, setEditingFile] = useState<string | null>(null);
 	const [editTitle, setEditTitle] = useState("");
+	const [selectedFiles, setSelectedFiles] = useState<Set<string>>(new Set());
 
 	const handleSort = (field: SortField) => {
 		if (field === sortField) {
@@ -113,6 +114,28 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 		setEditingFile(null);
 	};
 
+	const toggleFileSelection = (uuid: string) => {
+		setSelectedFiles(prev => {
+			const newSet = new Set(prev);
+			if (newSet.has(uuid)) {
+				newSet.delete(uuid);
+			} else {
+				newSet.add(uuid);
+			}
+			return newSet;
+		});
+	};
+
+	const toggleAllFiles = () => {
+		if (selectedFiles.size === filteredAndSortedUploads.length) {
+			// If all are selected, deselect all
+			setSelectedFiles(new Set());
+		} else {
+			// Otherwise, select all
+			setSelectedFiles(new Set(filteredAndSortedUploads.map(file => file.uuid)));
+		}
+	};
+
 	if (uploads.length === 0) {
 		return (
 			<div className="rounded-lg bg-slate-100 p-8 text-center">
@@ -144,6 +167,12 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 					<thead className="bg-gray-50">
 						<tr>
 							<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
+								<input
+									type="checkbox"
+									className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+									checked={selectedFiles.size > 0 && selectedFiles.size === filteredAndSortedUploads.length}
+									onChange={toggleAllFiles}
+								/>
 							</th>
 							<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
 								<button 
@@ -174,12 +203,12 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 						{filteredAndSortedUploads.map((file) => (
 							<tr key={file.uuid} className="hover:bg-gray-50">
 								<td className="whitespace-nowrap px-6 py-4">
-									<Link
-										href={`/files/${file.uuid}`}
-										className="mr-4 text-purple-600 hover:text-purple-900"
-									>
-										View
-									</Link>
+									<input
+										type="checkbox"
+										className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+										checked={selectedFiles.has(file.uuid)}
+										onChange={() => toggleFileSelection(file.uuid)}
+									/>
 								</td>
 								<td className="whitespace-nowrap px-6 py-4">
 									<div className="font-medium text-gray-900 text-sm">
@@ -246,10 +275,23 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 										{formatDate(file.createdAt)}
 									</div>
 								</td>
+								<td className="whitespace-nowrap px-6 py-4">
+									<Link
+										href={`/files/${file.uuid}`}
+										className="text-purple-600 hover:text-purple-900"
+									>
+										View
+									</Link>
+								</td>
 							</tr>
 						))}
 					</tbody>
 				</table>
+				{selectedFiles.size > 0 && (
+					<div className="bg-gray-50 px-6 py-3 text-sm">
+						<span className="mr-2">{selectedFiles.size} file{selectedFiles.size !== 1 ? 's' : ''} selected</span>
+					</div>
+				)}
 			</div>
 		</div>
 	);
