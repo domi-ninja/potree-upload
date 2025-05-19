@@ -62,6 +62,11 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 	const [filesList, setFilesList] = useState<FileUpload[]>(uploads);
 	const inputRef = useRef<HTMLInputElement>(null);
 
+	// Sync filesList with uploads prop when it changes
+	useEffect(() => {
+		setFilesList(uploads);
+	}, [uploads]);
+
 	const handleSort = (field: SortField) => {
 		if (field === sortField) {
 			setSortDirection(sortDirection === "asc" ? "desc" : "asc");
@@ -118,24 +123,30 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 		setEditingFile(null);
 	};
 
-	const handleEditSave = (file: FileUpload) => {
-		// Here you would normally make an API call to update the title
-		// For this simple implementation, we'll just update it in the UI
-		// In a real app, add the API call here
-
-		console.log("file", file);
-
-		const updatedUploads = filesList.map((f) =>
-			f.uuid === file.uuid ? { ...f, title: editTitle } : f,
-		);
-		
-		// Update state with the new list
-		setFilesList(updatedUploads);
-
-		// Update UI immediately (optimistic update)
-		file.title = editTitle;
-
-		setEditingFile(null);
+	const handleEditSave = async (file: FileUpload) => {
+		try {
+			// Make API call to update the title
+			await fetch(`/api/files/${file.uuid}`, {
+				method: "PATCH",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ title: editTitle }),
+			});
+			
+			// Update UI immediately (optimistic update)
+			const updatedUploads = filesList.map((f) =>
+				f.uuid === file.uuid ? { ...f, title: editTitle } : f,
+			);
+			
+			setFilesList(updatedUploads);
+			setEditingFile(null);
+			
+			// Refresh the page to get updated data from server
+			router.refresh();
+		} catch (error) {
+			console.error("Failed to update file title:", error);
+		}
 	};
 
 	const handleDeleteFile = async (uuid: string) => {
@@ -184,12 +195,7 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 	return (
 		<div>
 			<div className="mb-12 grid grid-cols-2 gap-4">
-				<FileUploadForm onUpload={() =>{
-
-					console.log("onUpload");
-					router.refresh()
-				
-				}}	 />
+				<FileUploadForm onUpload={() => router.refresh()} />
 				<FilesToLink
 					selectedFiles={Array.from(selectedFiles)}
 					uploads={uploads}

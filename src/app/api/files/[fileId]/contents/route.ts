@@ -1,12 +1,14 @@
-import { DeleteObjectCommand, S3 } from "@aws-sdk/client-s3";
 import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import { env } from "~/env";
 import { BUCKET_NAME, s3Client } from "~/lib/s3";
-import { deleteFile, getMyUploadById } from "~/server/queries";
+import {getMyUploadById } from "~/server/queries";
 
 const type = "server-only";
+
+export function getFileName( userId:string, fileRecord: Awaited<ReturnType<typeof getMyUploadById>>) {
+	return `${userId}_${fileRecord.uuid}`;
+}
 
 export async function GET(
 	request: Request,
@@ -27,7 +29,7 @@ export async function GET(
 	}
 
 	// Create a unique filename
-	const fileName = `${user.id}_${fileRecord.uuid}`;
+	const fileName = getFileName(user.id, fileRecord);
 
 	// Create the get command
 	const getCommand = new GetObjectCommand({
