@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { FaSearch, FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
+import { FaCheck, FaPen, FaSearch, FaSort, FaSortDown, FaSortUp, FaTimes } from "react-icons/fa";
 
 // Helper function to format dates in a readable way
 function formatDate(dateString: string | Date): string {
@@ -44,6 +44,8 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [sortField, setSortField] = useState<SortField>("createdAt");
 	const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
+	const [editingFile, setEditingFile] = useState<string | null>(null);
+	const [editTitle, setEditTitle] = useState("");
 
 	const handleSort = (field: SortField) => {
 		if (field === sortField) {
@@ -85,6 +87,30 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 			});
 	}, [uploads, searchTerm, sortField, sortDirection]);
 
+	const handleEditStart = (file: FileUpload) => {
+		setEditingFile(file.uuid);
+		setEditTitle(file.title);
+	};
+
+	const handleEditCancel = () => {
+		setEditingFile(null);
+	};
+
+	const handleEditSave = (file: FileUpload) => {
+		// Here you would normally make an API call to update the title
+		// For this simple implementation, we'll just update it in the UI
+		// In a real app, add the API call here
+		
+		const updatedUploads = uploads.map(f => 
+			f.uuid === file.uuid ? { ...f, title: editTitle } : f
+		);
+		
+		// Update UI immediately (optimistic update)
+		file.title = editTitle;
+		
+		setEditingFile(null);
+	};
+
 	if (uploads.length === 0) {
 		return (
 			<div className="rounded-lg bg-slate-100 p-8 text-center">
@@ -115,23 +141,35 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 				<table className="min-w-full divide-y divide-gray-200">
 					<thead className="bg-gray-50">
 						<tr>
-							<th
-								className="cursor-pointer px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider hover:bg-gray-100"
-								onClick={() => handleSort("title")}
-							>
-								File Name {getSortIcon("title")}
+							<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
+								<button 
+									type="button"
+									className="flex items-center focus:outline-none"
+									onClick={() => handleSort("title")}
+									aria-label="Sort by title"
+								>
+									File Name {getSortIcon("title")}
+								</button>
 							</th>
-							<th
-								className="cursor-pointer px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider hover:bg-gray-100"
-								onClick={() => handleSort("fileType")}
-							>
-								Type {getSortIcon("fileType")}
+							<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
+								<button 
+									type="button"
+									className="flex items-center focus:outline-none"
+									onClick={() => handleSort("fileType")}
+									aria-label="Sort by file type"
+								>
+									Type {getSortIcon("fileType")}
+								</button>
 							</th>
-							<th
-								className="cursor-pointer px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider hover:bg-gray-100"
-								onClick={() => handleSort("createdAt")}
-							>
-								Uploaded {getSortIcon("createdAt")}
+							<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
+								<button 
+									type="button"
+									className="flex items-center focus:outline-none"
+									onClick={() => handleSort("createdAt")}
+									aria-label="Sort by upload date"
+								>
+									Uploaded {getSortIcon("createdAt")}
+								</button>
 							</th>
 							<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
 								Actions
@@ -143,7 +181,44 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 							<tr key={file.uuid} className="hover:bg-gray-50">
 								<td className="whitespace-nowrap px-6 py-4">
 									<div className="font-medium text-gray-900 text-sm">
-										{file.title}
+										{editingFile === file.uuid ? (
+											<div className="flex items-center">
+												<input
+													type="text"
+													value={editTitle}
+													onChange={(e) => setEditTitle(e.target.value)}
+													className="mr-2 rounded border border-gray-300 px-2 py-1 text-sm"
+												/>
+												<button
+													type="button"
+													onClick={() => handleEditSave(file)}
+													className="mr-1 text-green-500 hover:text-green-700"
+													aria-label="Save"
+												>
+													<FaCheck />
+												</button>
+												<button
+													type="button"
+													onClick={handleEditCancel}
+													className="text-red-500 hover:text-red-700"
+													aria-label="Cancel"
+												>
+													<FaTimes />
+												</button>
+											</div>
+										) : (
+											<div className="flex items-center">
+												{file.title}
+												<button
+													type="button"
+													onClick={() => handleEditStart(file)}
+													className="ml-2 text-gray-500 hover:text-purple-700"
+													aria-label="Edit title"
+												>
+													<FaPen size={14} />
+												</button>
+											</div>
+										)}
 									</div>
 								</td>
 								<td className="whitespace-nowrap px-6 py-4">
