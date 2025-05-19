@@ -206,7 +206,7 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 		<div>
 			<ToastContainer position="top-center" autoClose={5000} />
 
-			<div className="mb-12 grid grid-cols-2 gap-4">
+			<div className="mb-12 grid grid-cols-1 md:grid-cols-2 gap-4">
 				<FileUploadForm onUpload={() => router.refresh()} />
 				<FilesToLink
 					selectedFiles={Array.from(selectedFiles)}
@@ -215,28 +215,30 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 			</div>
 			<h2 className="mb-4 font-semibold text-2xl">My Uploads
 
+			</h2>
+
+			<div className="relative mb-4 flex flex-row space-x-4">
+				<div className="flex-1">
+					<div className="pointer-events-none absolute inset-y-0 left-0 pt-3 pl-3">
+						<FaSearch className="text-gray-400" />
+					</div>
+					<input
+						type="text"
+						className="flex-1 block w-full rounded-lg border border-gray-300 bg-gray-50 pl-10 text-gray-900 text-sm focus:border-purple-500 focus:ring-purple-500 p-2.5"
+						placeholder="Search files..."
+						value={searchTerm}
+						onChange={(e) => setSearchTerm(e.target.value)}
+					/>	
+				</div>
 				<button
 					type="button"
 					disabled={selectedFiles.size === 0}
 					onClick={() => handleDeleteSelectedFiles()}
-					className="text-red-500 hover:text-red-700 float-right border border-red-500 rounded-md p-2 text-lg mb-4"
+					className="flex-1 rounded-lg border border-red-500 bg-gray-50 p-2.5 text-sm text-red-500 hover:bg-gray-100 focus:border-purple-500 focus:ring-purple-500 disabled:opacity-50"
 					aria-label="Delete files"
 				>
-					Delete {selectedFiles.size} file{selectedFiles.size !== 1 ? "s" : ""}
+					Delete selected 
 				</button>
-			</h2>
-
-			<div className="relative mb-4">
-				<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-					<FaSearch className="text-gray-400" />
-				</div>
-				<input
-					type="text"
-					className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pl-10 text-gray-900 text-sm focus:border-purple-500 focus:ring-purple-500"
-					placeholder="Search files..."
-					value={searchTerm}
-					onChange={(e) => setSearchTerm(e.target.value)}
-				/>
 			</div>
 
 			<div className="overflow-hidden rounded-lg bg-white shadow">
