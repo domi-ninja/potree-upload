@@ -6,7 +6,7 @@ import { env } from "~/env";
 import { BUCKET_NAME, s3Client } from "~/lib/s3";
 import { db } from "~/server/db";
 import { uploads } from "~/server/db/schema";
-
+import { getBucketFileName } from "~/app/api/files/route";
 const type = "server-only";
 
 function getSafeTitle(userinput: string) {
@@ -28,6 +28,7 @@ function getSafeTitle(userinput: string) {
 	}
 	return title;
 }
+
 
 export async function POST(request: Request) {
 	try {
@@ -56,7 +57,7 @@ export async function POST(request: Request) {
 		};
 
 		// Create a unique filename
-		const fileName = `${user.id}_${upload.uuid}`;
+		const fileName = getBucketFileName(upload.uuid.toString());   
 
 		// Create the upload command
 		const uploadCommand = new PutObjectCommand({

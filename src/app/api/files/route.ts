@@ -15,3 +15,8 @@ export async function GET(request: Request) {
 
 	return NextResponse.json(files);
 }
+
+
+export function getBucketFileName( uuid:string) {
+	return `${uuid}.json5`;
+}

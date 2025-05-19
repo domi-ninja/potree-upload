@@ -3,25 +3,21 @@ import { currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { BUCKET_NAME, s3Client } from "~/lib/s3";
 import {getMyUploadById } from "~/server/queries";
-
+import { getBucketFileName } from "../../route";
 const type = "server-only";
 
-export function getFileName( userId:string, fileRecord: Awaited<ReturnType<typeof getMyUploadById>>) {
-	return `${userId}_${fileRecord.uuid}`;
-}
+// force dynamic
+export const dynamic = 'force-dynamic';
+
+
 
 export async function GET(
 	request: Request,
 	{ params }: { params: { fileId: string } },
 ) {
-	const user = await currentUser();
+	const { fileId }  = await params;
 
-	const { fileId } = await params;
-
-	if (!user) {
-		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-	}
-
+	console.log("fileId", fileId);
 	const fileRecord = await getMyUploadById(fileId);
 
 	if (!fileRecord) {
@@ -29,7 +25,7 @@ export async function GET(
 	}
 
 	// Create a unique filename
-	const fileName = getFileName(user.id, fileRecord);
+	const fileName = getBucketFileName(fileRecord.uuid.toString());
 
 	// Create the get command
 	const getCommand = new GetObjectCommand({
@@ -46,7 +42,7 @@ export async function GET(
 		headers.set("Content-Type", fileRecord.fileType);
 
 		// Convert streaming body to array buffer
-		const bodyContents = await response.Body?.transformToByteArray();
+		const bodyContents = await response.Body?.transformToString();
 		if (!bodyContents) {
 			throw new Error("Empty response from S3");
 		}

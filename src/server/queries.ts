@@ -34,12 +34,6 @@ export async function adminGetSomeUserUploads(userId: string) {
 }
 
 export async function getMyUploadById(uuid: string) {
-	const user = await currentUser();
-
-	if (!user) {
-		throw new Error("User not found");
-	}
-
 	const upload = await db.query.uploads.findFirst({
 		where: eq(uploads.uuid, uuid),
 	});
