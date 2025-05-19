@@ -2,9 +2,17 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { FaCheck, FaPen, FaSearch, FaSort, FaSortDown, FaSortUp, FaTimes } from "react-icons/fa";
-import FilesToLink from "./FilesToLink";
+import {
+	FaCheck,
+	FaPen,
+	FaSearch,
+	FaSort,
+	FaSortDown,
+	FaSortUp,
+	FaTimes,
+} from "react-icons/fa";
 import FileUploadForm from "./FileUploadForm";
+import FilesToLink from "./FilesToLink";
 
 // Helper function to format dates in a readable way
 function formatDate(dateString: string | Date): string {
@@ -49,7 +57,6 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 	const [editingFile, setEditingFile] = useState<string | null>(null);
 	const [editTitle, setEditTitle] = useState("");
 	const [selectedFiles, setSelectedFiles] = useState<Set<string>>(new Set());
-
 
 	const handleSort = (field: SortField) => {
 		if (field === sortField) {
@@ -104,21 +111,21 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 		// Here you would normally make an API call to update the title
 		// For this simple implementation, we'll just update it in the UI
 		// In a real app, add the API call here
-		
+
 		console.log("file", file);
 
-		const updatedUploads = uploads.map(f => 
-			f.uuid === file.uuid ? { ...f, title: editTitle } : f
+		const updatedUploads = uploads.map((f) =>
+			f.uuid === file.uuid ? { ...f, title: editTitle } : f,
 		);
-		
+
 		// Update UI immediately (optimistic update)
 		file.title = editTitle;
-		
+
 		setEditingFile(null);
 	};
 
 	const toggleFileSelection = (uuid: string) => {
-		setSelectedFiles(prev => {
+		setSelectedFiles((prev) => {
 			const newSet = new Set(prev);
 			if (newSet.has(uuid)) {
 				newSet.delete(uuid);
@@ -135,11 +142,11 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 			setSelectedFiles(new Set());
 		} else {
 			// Otherwise, select all
-			setSelectedFiles(new Set(filteredAndSortedUploads.map(file => file.uuid)));
+			setSelectedFiles(
+				new Set(filteredAndSortedUploads.map((file) => file.uuid)),
+			);
 		}
 	};
-
-
 
 	if (uploads.length === 0) {
 		return (
@@ -154,13 +161,15 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 
 	return (
 		<div>
-
 			<div className="mb-4 grid grid-cols-2 gap-4">
 				<FileUploadForm />
-				<FilesToLink selectedFiles={Array.from(selectedFiles)} uploads={uploads} />
+				<FilesToLink
+					selectedFiles={Array.from(selectedFiles)}
+					uploads={uploads}
+				/>
 			</div>
 			<h2 className="mb-4 font-semibold text-2xl">My Uploads</h2>
-				
+
 			<div className="relative mb-4">
 				<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
 					<FaSearch className="text-gray-400" />
@@ -182,12 +191,15 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 								<input
 									type="checkbox"
 									className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
-									checked={selectedFiles.size > 0 && selectedFiles.size === filteredAndSortedUploads.length}
+									checked={
+										selectedFiles.size > 0 &&
+										selectedFiles.size === filteredAndSortedUploads.length
+									}
 									onChange={toggleAllFiles}
 								/>
 							</th>
 							<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
-								<button 
+								<button
 									type="button"
 									className="flex items-center focus:outline-none"
 									onClick={() => handleSort("title")}
@@ -197,7 +209,7 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 								</button>
 							</th>
 							<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
-								<button 
+								<button
 									type="button"
 									className="flex items-center focus:outline-none"
 									onClick={() => handleSort("createdAt")}
@@ -206,9 +218,7 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 									Uploaded {getSortIcon("createdAt")}
 								</button>
 							</th>
-							<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
-								
-							</th>
+							<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider"></th>
 						</tr>
 					</thead>
 					<tbody className="divide-y divide-gray-200 bg-white">
@@ -224,7 +234,6 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 								</td>
 								<td className="whitespace-nowrap px-6 py-4">
 									<div className="font-medium text-gray-900 text-sm">
-										
 										{editingFile === file.uuid ? (
 											<div className="flex items-center">
 												<input
@@ -232,18 +241,18 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 													value={editTitle}
 													onChange={(e) => setEditTitle(e.target.value)}
 													onKeyDown={(e) => {
-														if (e.key === 'Enter') {
+														if (e.key === "Enter") {
 															handleEditSave(file);
-														} else if (e.key === 'Escape') {
+														} else if (e.key === "Escape") {
 															handleEditCancel();
 														}
 													}}
-													className="mr-2 p-4 rounded border border-gray-300 text-sm flex-1"
+													className="mr-2 flex-1 rounded border border-gray-300 p-4 text-sm"
 												/>
 												<button
 													type="button"
 													onClick={() => handleEditSave(file)}
-													className="mx-2 p-4 rounded border border-gray-300 text-sm text-green-500 hover:text-green-700"
+													className="mx-2 rounded border border-gray-300 p-4 text-green-500 text-sm hover:text-green-700"
 													aria-label="Save"
 												>
 													<FaCheck />
@@ -251,7 +260,7 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 												<button
 													type="button"
 													onClick={handleEditCancel}
-													className="mx-2 p-4 rounded border border-gray-300 text-sm text-red-500 hover:text-red-700"
+													className="mx-2 rounded border border-gray-300 p-4 text-red-500 text-sm hover:text-red-700"
 													aria-label="Cancel"
 												>
 													<FaTimes />
@@ -259,9 +268,9 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 											</div>
 										) : (
 											<div className="flex items-center">
-												<button 
+												<button
 													type="button"
-													className="cursor-pointer text-left hover:text-purple-700 bg-transparent border-none p-0 font-medium text-gray-900 text-sm"
+													className="cursor-pointer border-none bg-transparent p-0 text-left font-medium text-gray-900 text-sm hover:text-purple-700"
 													onClick={() => handleEditStart(file)}
 													aria-label="Edit title"
 												>
@@ -275,9 +284,7 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 												>
 													<FaPen size={14} />
 												</button>
-												
 											</div>
-											
 										)}
 									</div>
 								</td>
@@ -301,7 +308,10 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 				</table>
 				{selectedFiles.size > 0 && (
 					<div className="bg-gray-50 px-6 py-3 text-sm">
-						<span className="mr-2">{selectedFiles.size} file{selectedFiles.size !== 1 ? 's' : ''} selected</span>
+						<span className="mr-2">
+							{selectedFiles.size} file{selectedFiles.size !== 1 ? "s" : ""}{" "}
+							selected
+						</span>
 					</div>
 				)}
 			</div>

@@ -10,7 +10,7 @@ import {
 	SignedIn,
 	SignedOut,
 	UserButton,
-} from '@clerk/nextjs'
+} from "@clerk/nextjs";
 
 export const metadata: Metadata = {
 	title: "Create T3 App",
@@ -30,13 +30,13 @@ export default function RootLayout({
 		<ClerkProvider>
 			<html lang="en" className={`${geist.variable}`}>
 				<body>
-					<header className="flex justify-end items-center p-4 gap-4 h-16 text-2xl">
-							<SignedOut>
-								<SignInButton />
-							</SignedOut>
-							<SignedIn>
-								<UserButton />
-							</SignedIn>
+					<header className="flex h-16 items-center justify-end gap-4 p-4 text-2xl">
+						<SignedOut>
+							<SignInButton />
+						</SignedOut>
+						<SignedIn>
+							<UserButton />
+						</SignedIn>
 					</header>
 					{children}
 				</body>

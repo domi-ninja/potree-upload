@@ -10,4 +10,3 @@ export default {
 	},
 	// tablesFilter: ["potree-upload_*"],
 } satisfies Config;
-

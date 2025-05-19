@@ -8,7 +8,7 @@ export const env = createEnv({
 	 */
 	server: {
 		CLERK_SECRET_KEY: z.string(),
-		
+
 		DATABASE_URL: z.string().url(),
 
 		S3_MASTER_KEY_ID: z.string(),
@@ -16,12 +16,12 @@ export const env = createEnv({
 
 		NODE_ENV: z.string(),
 	},
-	
+
 	/**
 	 * Specify your client-side environment variables schema here. This way you can ensure the app
 	 * isn't built with invalid env vars. To expose them to the client, prefix them with
 	 * `NEXT_PUBLIC_`.
-	*/
+	 */
 	client: {
 		NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string(),
 		// NEXT_PUBLIC_CLIENTVAR: z.string(),
@@ -32,7 +32,8 @@ export const env = createEnv({
 	 * middlewares) or client-side so we need to destruct manually.
 	 */
 	runtimeEnv: {
-		NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+		NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
+			process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
 		CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
 
 		DATABASE_URL: process.env.DATABASE_URL,
