@@ -2,6 +2,7 @@ import "~/styles/globals.css";
 
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+import AdminHeader from "~/components/AdminHeader";
 
 import {
 	ClerkProvider,
@@ -10,6 +11,7 @@ import {
 	SignedIn,
 	SignedOut,
 	UserButton,
+	useUser,
 } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
@@ -30,13 +32,19 @@ export default function RootLayout({
 		<ClerkProvider>
 			<html lang="en" className={`${geist.variable}`}>
 				<body>
-					<header className="flex h-16 items-center justify-end gap-4 p-4 text-2xl">
-						<SignedOut>
-							<SignInButton />
-						</SignedOut>
-						<SignedIn>
+					<header className="bg-gray-100 h-16 gap-4 p-4 text-2xl">
+						<div className="container mx-auto px-4">
+						<h1 className="text-2xl font-bold inline-block">Potree Viewer</h1>
+						<div className="float-right">
+							<SignedOut>
+								<SignInButton />
+							</SignedOut>
+							<SignedIn>
+							<AdminHeader/>
 							<UserButton />
-						</SignedIn>
+							</SignedIn>
+						</div>
+						</div>
 					</header>
 					{children}
 				</body>
