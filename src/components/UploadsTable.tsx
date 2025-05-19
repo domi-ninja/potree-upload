@@ -201,6 +201,9 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 		}
 	};
 
+	const getPotreeUrl = (uuid: string) => {
+		return `/potree.html?file=/api/files/${uuid}/contents`;
+	};
 
 	return (
 		<div>
@@ -298,7 +301,7 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 								</td>
 								<td className="whitespace-nowrap">
 									<Link
-										href={`/files/${file.uuid}`}
+										href={getPotreeUrl(file.uuid)}
 										className="bg-purple-600 p-4 text-white"
 									>
 										View
