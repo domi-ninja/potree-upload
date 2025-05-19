@@ -1,6 +1,10 @@
 import React from "react";
 import { isCurrentUserAdmin, adminGetAllUsers } from "~/server/auth/clerk";
 import Link from "next/link";
+
+// Mark this route as dynamic to allow headers usage
+export const dynamic = 'force-dynamic';
+
 export default async function AdminPage() {
     
     const isAdmin = await isCurrentUserAdmin();

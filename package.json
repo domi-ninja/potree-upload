@@ -15,6 +15,7 @@
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "drizzle-kit migrate",
 		"db:push": "drizzle-kit push",
+		"db:pp": "DATABASE_URL=$(cat ./PROD_DB_URL.txt | head -1 ) drizzle-kit push",
 		"db:local": "drizzle-kit studio",
 		"db:prod": "DATABASE_URL=$(cat ./PROD_DB_URL.txt | head -1 ) drizzle-kit studio"
 	},

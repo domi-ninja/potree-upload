@@ -80,7 +80,6 @@ export async function POST(request: Request) {
 		//const publicUrl = await getSignedUrl(s3Client, getObjectCommand, { expiresIn: 3600 });
 
 		const uploadResult = await db.insert(uploads).values(upload);
-		console.log(uploadResult);
 
 		return NextResponse.json({
 			success: true,
