@@ -161,7 +161,7 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 
 	return (
 		<div>
-			<div className="mb-4 grid grid-cols-2 gap-4">
+			<div className="mb-12 grid grid-cols-2 gap-4">
 				<FileUploadForm />
 				<FilesToLink
 					selectedFiles={Array.from(selectedFiles)}
