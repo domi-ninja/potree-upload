@@ -12,5 +12,5 @@ import * as schema from "./schema";
 // 	conn: postgres.Sql | undefined;
 // };
 
-const conn = postgres( env.DATABASE_URL );
+const conn = postgres(env.DATABASE_URL);
 export const db = drizzle(conn, { schema });

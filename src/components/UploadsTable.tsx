@@ -101,6 +101,8 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 		// For this simple implementation, we'll just update it in the UI
 		// In a real app, add the API call here
 		
+		console.log("file", file);
+
 		const updatedUploads = uploads.map(f => 
 			f.uuid === file.uuid ? { ...f, title: editTitle } : f
 		);
@@ -142,6 +144,8 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 					<thead className="bg-gray-50">
 						<tr>
 							<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
+							</th>
+							<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
 								<button 
 									type="button"
 									className="flex items-center focus:outline-none"
@@ -155,16 +159,6 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 								<button 
 									type="button"
 									className="flex items-center focus:outline-none"
-									onClick={() => handleSort("fileType")}
-									aria-label="Sort by file type"
-								>
-									Type {getSortIcon("fileType")}
-								</button>
-							</th>
-							<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
-								<button 
-									type="button"
-									className="flex items-center focus:outline-none"
 									onClick={() => handleSort("createdAt")}
 									aria-label="Sort by upload date"
 								>
@@ -172,7 +166,7 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 								</button>
 							</th>
 							<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
-								Actions
+								
 							</th>
 						</tr>
 					</thead>
@@ -180,19 +174,35 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 						{filteredAndSortedUploads.map((file) => (
 							<tr key={file.uuid} className="hover:bg-gray-50">
 								<td className="whitespace-nowrap px-6 py-4">
+									<Link
+										href={`/files/${file.uuid}`}
+										className="mr-4 text-purple-600 hover:text-purple-900"
+									>
+										View
+									</Link>
+								</td>
+								<td className="whitespace-nowrap px-6 py-4">
 									<div className="font-medium text-gray-900 text-sm">
+										
 										{editingFile === file.uuid ? (
 											<div className="flex items-center">
 												<input
 													type="text"
 													value={editTitle}
 													onChange={(e) => setEditTitle(e.target.value)}
-													className="mr-2 rounded border border-gray-300 px-2 py-1 text-sm"
+													onKeyDown={(e) => {
+														if (e.key === 'Enter') {
+															handleEditSave(file);
+														} else if (e.key === 'Escape') {
+															handleEditCancel();
+														}
+													}}
+													className="mr-2 p-4 rounded border border-gray-300 text-sm flex-1"
 												/>
 												<button
 													type="button"
 													onClick={() => handleEditSave(file)}
-													className="mr-1 text-green-500 hover:text-green-700"
+													className="mx-2 p-4 rounded border border-gray-300 text-sm text-green-500 hover:text-green-700"
 													aria-label="Save"
 												>
 													<FaCheck />
@@ -200,7 +210,7 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 												<button
 													type="button"
 													onClick={handleEditCancel}
-													className="text-red-500 hover:text-red-700"
+													className="mx-2 p-4 rounded border border-gray-300 text-sm text-red-500 hover:text-red-700"
 													aria-label="Cancel"
 												>
 													<FaTimes />
@@ -208,7 +218,14 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 											</div>
 										) : (
 											<div className="flex items-center">
-												{file.title}
+												<button 
+													type="button"
+													className="cursor-pointer text-left hover:text-purple-700 bg-transparent border-none p-0 font-medium text-gray-900 text-sm"
+													onClick={() => handleEditStart(file)}
+													aria-label="Edit title"
+												>
+													{file.title}
+												</button>
 												<button
 													type="button"
 													onClick={() => handleEditStart(file)}
@@ -217,25 +234,17 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 												>
 													<FaPen size={14} />
 												</button>
+												
 											</div>
+											
 										)}
 									</div>
 								</td>
-								<td className="whitespace-nowrap px-6 py-4">
-									<div className="text-gray-500 text-sm">{file.fileType}</div>
-								</td>
+
 								<td className="whitespace-nowrap px-6 py-4">
 									<div className="text-gray-500 text-sm">
 										{formatDate(file.createdAt)}
 									</div>
-								</td>
-								<td className="whitespace-nowrap px-6 py-4 font-medium text-sm">
-									<Link
-										href={`/files/${file.uuid}`}
-										className="mr-4 text-purple-600 hover:text-purple-900"
-									>
-										View
-									</Link>
 								</td>
 							</tr>
 						))}
