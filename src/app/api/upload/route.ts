@@ -9,6 +9,26 @@ import { uploads } from "~/server/db/schema";
 
 const type="server-only"
 
+function getSafeTitle(userinput: string) {
+  let title = userinput.trim();
+  const parts = title.split(".");
+  if (parts.length !== 2) {
+    throw new Error("Unauthorized");
+  }
+  if (!parts[0]) {
+    throw new Error("Unauthorized");
+  }
+  if (title.length  === 0){ 
+    throw new Error("Unauthorized");
+  }
+  title = parts[0];
+  title = title.replace(/[^a-zA-Z0-9_-]/g, "_");
+  if (title.length > 80) {
+    title = title.slice(0, 80);
+  }
+  return title;
+}
+
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
@@ -29,7 +49,7 @@ export async function POST(request: Request) {
     
     
     const upload = {
-      title: file.name,
+      title: getSafeTitle(file.name),
       uuid: crypto.randomUUID(),
       userId: user.id,
       fileType: file.type,
@@ -68,7 +88,7 @@ export async function POST(request: Request) {
       success: true, 
       fileName: file.name,
       fileSize: file.size,
-      fileType: file.type,
+      fileType: "application/json",
       filePath: fileName,
       publicUrl: upload.uuid,
     });
