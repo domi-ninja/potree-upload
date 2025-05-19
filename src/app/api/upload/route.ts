@@ -1,12 +1,11 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import { s3Client } from "~/lib/s3";
+import { BUCKET_NAME, s3Client } from "~/lib/s3";
 import { PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
 import { db } from "~/server/db";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { env } from "~/env";
 import { uploads } from "~/server/db/schema";
-const BUCKET_NAME = `potree-upload-${env.NODE_ENV}`;
 
 const type="server-only"
 

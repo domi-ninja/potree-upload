@@ -14,3 +14,6 @@ export const s3Client = new S3Client({
     secretAccessKey: env.S3_MASTER_KEY_SECRET,
   }
 }); 
+
+
+export const BUCKET_NAME = `potree-upload-${env.NODE_ENV}`;

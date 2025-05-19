@@ -20,7 +20,7 @@ export async function getMyUploads(){
 	return results;
 }
 
-export async function getUploadById(uuid: string){
+export async function getMyUploadById(uuid: string){
     const user = await currentUser();
 
     if (!user) {
