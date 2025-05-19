@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useMemo, useState, useRef, useEffect } from "react";
 import {
 	FaCheck,
 	FaPen,
@@ -51,12 +52,15 @@ type SortField = "title" | "fileType" | "createdAt";
 type SortDirection = "asc" | "desc";
 
 export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
+	const router = useRouter();
 	const [searchTerm, setSearchTerm] = useState("");
 	const [sortField, setSortField] = useState<SortField>("createdAt");
 	const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
 	const [editingFile, setEditingFile] = useState<string | null>(null);
 	const [editTitle, setEditTitle] = useState("");
 	const [selectedFiles, setSelectedFiles] = useState<Set<string>>(new Set());
+	const [filesList, setFilesList] = useState<FileUpload[]>(uploads);
+	const inputRef = useRef<HTMLInputElement>(null);
 
 	const handleSort = (field: SortField) => {
 		if (field === sortField) {
@@ -77,7 +81,7 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 	};
 
 	const filteredAndSortedUploads = useMemo(() => {
-		return [...uploads]
+		return [...filesList]
 			.filter(
 				(file) =>
 					file.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -96,11 +100,18 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 					? valueA.localeCompare(valueB)
 					: valueB.localeCompare(valueA);
 			});
-	}, [uploads, searchTerm, sortField, sortDirection]);
+	}, [filesList, searchTerm, sortField, sortDirection]);
+
+	useEffect(() => {
+		if (editingFile && inputRef.current) {
+			inputRef.current.focus();
+		}
+	}, [editingFile]);
 
 	const handleEditStart = (file: FileUpload) => {
 		setEditingFile(file.uuid);
 		setEditTitle(file.title);
+		// input will be focused by the useEffect
 	};
 
 	const handleEditCancel = () => {
@@ -114,14 +125,35 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 
 		console.log("file", file);
 
-		const updatedUploads = uploads.map((f) =>
+		const updatedUploads = filesList.map((f) =>
 			f.uuid === file.uuid ? { ...f, title: editTitle } : f,
 		);
+		
+		// Update state with the new list
+		setFilesList(updatedUploads);
 
 		// Update UI immediately (optimistic update)
 		file.title = editTitle;
 
 		setEditingFile(null);
+	};
+
+	const handleDeleteFile = async (uuid: string) => {
+	
+		// call the api to delete the file, no need to use fetch
+		await fetch(`/api/files/${uuid}`, {
+			method: "DELETE",
+		});
+
+		// refresh the page
+		router.refresh();
+	};
+
+
+	const handleDeleteSelectedFiles = async () => {
+		for (const uuid of selectedFiles) {
+			await handleDeleteFile(uuid);
+		}
 	};
 
 	const toggleFileSelection = (uuid: string) => {
@@ -148,27 +180,32 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 		}
 	};
 
-	if (uploads.length === 0) {
-		return (
-			<div className="rounded-lg bg-slate-100 p-8 text-center">
-				<h2 className="mb-2 font-medium text-xl">No files uploaded yet</h2>
-				<p className="mb-4 text-slate-600">
-					Use the upload form above to add your first file
-				</p>
-			</div>
-		);
-	}
 
 	return (
 		<div>
 			<div className="mb-12 grid grid-cols-2 gap-4">
-				<FileUploadForm />
+				<FileUploadForm onUpload={() =>{
+
+					console.log("onUpload");
+					router.refresh()
+				
+				}}	 />
 				<FilesToLink
 					selectedFiles={Array.from(selectedFiles)}
 					uploads={uploads}
 				/>
 			</div>
-			<h2 className="mb-4 font-semibold text-2xl">My Uploads</h2>
+			<h2 className="mb-4 font-semibold text-2xl">My Uploads
+
+				<button
+					type="button"
+					onClick={() => handleDeleteSelectedFiles()}
+					className="text-red-500 hover:text-red-700 float-right"
+					aria-label="Delete files"
+				>
+					Delete {selectedFiles.size} file{selectedFiles.size !== 1 ? "s" : ""}
+				</button>
+			</h2>
 
 			<div className="relative mb-4">
 				<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -222,10 +259,11 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 								</button>
 							</th>
 							<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
-								
+								Actions
 							</th>
 						</tr>
 					</thead>
+					
 					<tbody className="divide-y divide-gray-200 bg-white">
 						{filteredAndSortedUploads.map((file) => (
 							<tr key={file.uuid} className="hover:bg-gray-50">
@@ -261,6 +299,8 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 														}
 													}}
 													className="mr-2 flex-1 rounded border border-gray-300 p-4 text-sm"
+													id={`edit-title-${file.uuid}`}
+													ref={inputRef}
 												/>
 												<button
 													type="button"
@@ -306,6 +346,16 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 									<div className="text-gray-500 text-sm">
 										{formatDate(file.createdAt)}
 									</div>
+								</td>
+								<td className="whitespace-nowrap px-6 py-4">
+									<button
+										type="button"
+										onClick={() => handleDeleteFile(file.uuid)}
+										className="text-red-500 hover:text-red-700"
+										aria-label="Delete file"
+									>
+										Delete
+									</button>
 								</td>
 							</tr>
 						))}

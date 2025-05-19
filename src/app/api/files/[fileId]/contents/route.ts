@@ -1,10 +1,10 @@
-import { S3 } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, S3 } from "@aws-sdk/client-s3";
 import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { env } from "~/env";
 import { BUCKET_NAME, s3Client } from "~/lib/s3";
-import { getMyUploadById } from "~/server/queries";
+import { deleteFile, getMyUploadById } from "~/server/queries";
 
 const type = "server-only";
 
@@ -60,3 +60,4 @@ export async function GET(
 		);
 	}
 }
+

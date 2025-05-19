@@ -37,3 +37,21 @@ export async function getMyUploadById(uuid: string) {
 
 	return upload;
 }
+
+export async function deleteFile(uuid: string) {
+	const user = await currentUser();
+
+	if (!user) {
+		throw new Error("User not found");
+	}
+
+	const file = await db.query.uploads.findFirst({
+		where: eq(uploads.uuid, uuid),
+	});
+
+	if (!file) {
+		throw new Error("File not found");
+	}
+
+	await db.delete(uploads).where(eq(uploads.uuid, uuid));
+}	

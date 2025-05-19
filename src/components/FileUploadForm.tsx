@@ -12,7 +12,7 @@ interface UploadResult {
 	publicUrl?: string;
 }
 
-export default function FileUploadForm() {
+export default function FileUploadForm({ onUpload }: { onUpload: () => void }) {
 	const [file, setFile] = useState<File | null>(null);
 	const [uploading, setUploading] = useState(false);
 	const [uploadResult, setUploadResult] = useState<UploadResult | null>(null);
@@ -56,10 +56,8 @@ export default function FileUploadForm() {
 
 			setUploadResult(result);
 
-			// Refresh the page after successful upload
-			setTimeout(() => {
-				router.refresh();
-			}, 1500); // Small delay to show success message
+      onUpload();
+
 		} catch (err) {
 			setError(err instanceof Error ? err.message : "Upload failed");
 		} finally {
