@@ -59,14 +59,7 @@ export default async function FilesPage() {
 			</SignedOut>
 
 			<SignedIn>
-				{/* File Upload Form */}
-				<FileUploadForm />
-
-				<div className="mt-10">
-					<h2 className="mb-4 font-semibold text-2xl">My Uploads</h2>
-
-					<UploadsTable uploads={uploads} />
-				</div>
+				<UploadsTable uploads={uploads} />
 			</SignedIn>
 		</main>
 	);

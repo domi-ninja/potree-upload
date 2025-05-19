@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { FaCheck, FaPen, FaSearch, FaSort, FaSortDown, FaSortUp, FaTimes } from "react-icons/fa";
+import FilesToLink from "./FilesToLink";
+import FileUploadForm from "./FileUploadForm";
 
 // Helper function to format dates in a readable way
 function formatDate(dateString: string | Date): string {
@@ -30,7 +32,7 @@ function formatDate(dateString: string | Date): string {
 	});
 }
 
-type FileUpload = {
+export type FileUpload = {
 	uuid: string;
 	title: string;
 	fileType: string;
@@ -47,6 +49,7 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 	const [editingFile, setEditingFile] = useState<string | null>(null);
 	const [editTitle, setEditTitle] = useState("");
 	const [selectedFiles, setSelectedFiles] = useState<Set<string>>(new Set());
+
 
 	const handleSort = (field: SortField) => {
 		if (field === sortField) {
@@ -136,6 +139,8 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 		}
 	};
 
+
+
 	if (uploads.length === 0) {
 		return (
 			<div className="rounded-lg bg-slate-100 p-8 text-center">
@@ -149,6 +154,13 @@ export default function UploadsTable({ uploads }: { uploads: FileUpload[] }) {
 
 	return (
 		<div>
+
+			<div className="mb-4 grid grid-cols-2 gap-4">
+				<FileUploadForm />
+				<FilesToLink selectedFiles={Array.from(selectedFiles)} uploads={uploads} />
+			</div>
+			<h2 className="mb-4 font-semibold text-2xl">My Uploads</h2>
+				
 			<div className="relative mb-4">
 				<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
 					<FaSearch className="text-gray-400" />
