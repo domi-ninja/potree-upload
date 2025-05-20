@@ -17,8 +17,8 @@ const config = {
 	// rewrite
 	rewrites: async () => [
 		{
-			source: '/potree/potree.html',
-			destination: '/potree/potree.html',
+			source: '/potree/:path*',
+			destination: '/potree/:path*',
 		},
 	],
 
