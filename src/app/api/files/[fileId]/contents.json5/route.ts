@@ -15,7 +15,6 @@ export async function GET(
 ) {
 	const { fileId } = await params;
 
-	console.log("fileId", fileId);
 	const fileRecord = await getMyUploadById(fileId);
 
 	if (!fileRecord) {
@@ -23,7 +22,7 @@ export async function GET(
 	}
 
 	// Create a unique filename
-	const fileName = getBucketFileName(fileRecord.uuid.toString());
+	const fileName = getBucketFileName(fileRecord.uuid.toString(), "contents");
 
 	// Create the get command
 	const getCommand = new GetObjectCommand({
@@ -39,7 +38,7 @@ export async function GET(
 		const headers = new Headers();
 		headers.set("Content-Type", fileRecord.fileType);
 
-		// Convert streaming body to array buffer
+		// Convert streaming body to string
 		const bodyContents = await response.Body?.transformToString();
 		if (!bodyContents) {
 			throw new Error("Empty response from S3");

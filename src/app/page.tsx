@@ -1,4 +1,5 @@
 import { SignedIn, SignedOut } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import Link from "next/link";
 import FileUploadForm from "~/components/FileUploadForm";
 import UploadsTable from "~/components/UploadsTable";
@@ -44,7 +45,14 @@ function formatDate(dateString: string | Date): string {
 }
 
 export default async function FilesPage() {
-	const uploads = await getMyUploads();
+
+	const user = await currentUser();
+
+	if (!user) {
+		return <div>Please sign in to view your files.</div>;
+	}
+
+	const uploads = await getMyUploads(user.id.toString());
 
 	return (
 		<main className="container mx-auto px-4 py-10">

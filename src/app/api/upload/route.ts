@@ -57,7 +57,7 @@ export async function POST(request: Request) {
 		};
 
 		// Create a unique filename
-		const fileName = getBucketFileName(upload.uuid.toString());   
+		const fileName = getBucketFileName(upload.uuid.toString(), "contents");   
 
 		// Create the upload command
 		const uploadCommand = new PutObjectCommand({

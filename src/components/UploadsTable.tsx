@@ -63,7 +63,7 @@ export default function UploadsTable({ uploads, admin }: { uploads: FileUpload[]
 	const [selectedFiles, setSelectedFiles] = useState<Set<string>>(new Set());
 	const [filesList, setFilesList] = useState<FileUpload[]>(uploads);
 	const inputRef = useRef<HTMLInputElement>(null);
-
+	const [thumbnailSize, setThumbnailSize] = useState(64);
 	// Sync filesList with uploads prop when it changes
 	useEffect(() => {
 		setFilesList(uploads);
@@ -262,6 +262,16 @@ export default function UploadsTable({ uploads, admin }: { uploads: FileUpload[]
 								/>
 							</th>
 							<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
+								<button
+									type="button"
+									className="border border-gray-300 rounded-lg p-2 flex items-center focus:outline-none"
+									onClick={() => setThumbnailSize( thumbnailSize>=256 ? 64 : thumbnailSize*2 )}
+									aria-label="Increase thumbnail size"
+								>
+									Thumbnail {thumbnailSize}
+								</button>
+							</th>
+							<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
 								View
 							</th>
 							<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
@@ -300,6 +310,14 @@ export default function UploadsTable({ uploads, admin }: { uploads: FileUpload[]
 										checked={selectedFiles.has(file.uuid)}
 										onChange={() => toggleFileSelection(file.uuid)}
 									/>
+								</td>
+								<td className="whitespace-nowrap">
+									<div style={{
+										width: `${thumbnailSize}px`,
+										height: `${thumbnailSize}px`
+									}}>
+										<img className="w-full h-full object-cover" src={`/api/files/${file.uuid}/thumbnail`} alt="Thumbnail" />
+									</div>
 								</td>
 								<td className="whitespace-nowrap">
 									<Link

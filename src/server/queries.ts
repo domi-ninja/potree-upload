@@ -5,15 +5,10 @@ import { db } from "./db";
 import { uploads } from "./db/schema";
 
 
-export async function getMyUploads() {
-	const user = await currentUser();
-
-	if (!user) {
-		return [];
-	}
+export async function getMyUploads(userId: string) {
 
 	const results = await db.query.uploads.findMany({
-		where: eq(uploads.userId, user.id),
+		where: eq(uploads.userId, userId),
 		orderBy: desc(uploads.createdAt),
 	});
 	return results;
