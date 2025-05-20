@@ -7,21 +7,21 @@ import "./src/env.js";
 /** @type {import("next").NextConfig} */
 const config = {
     	// build speedup by shittier error messages
-	// typescript: {
-	// 	ignoreBuildErrors: true,
-	// },
-	// eslint: {
-	// 	ignoreDuringBuilds: true,
-	// },
+	typescript: {
+		ignoreBuildErrors: true,
+	},
+	eslint: {
+		ignoreDuringBuilds: true,
+	},
 
-	// rewrite
-	rewrites: async () => [
-		{
-			source: '/potree/:path*',
-			destination: '/potree/:path*',
-		},
-	],
-
+	// // rewrite
+	// rewrites: async () => [
+	// 	{
+	// 		source: '/potree/:path*',
+	// 		destination: '/potree/:path*',
+	// 	},
+	// ],
+	
 };
 
 export default config;
