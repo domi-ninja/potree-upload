@@ -46,4 +46,3 @@ yarn-error.log*
 .idea
 PROD_DB_URL.txt
 
-public/potree
