@@ -13,21 +13,6 @@ const config = {
 	eslint: {
 		ignoreDuringBuilds: true,
 	},
-	// Ensure all files in the public directory are included in the build
-	output: 'standalone',
-	// Explicitly include public directory assets
-	publicRuntimeConfig: {
-		staticFolder: '/public',
-	},
-	// Add rewrites for HTML files in public folder
-	async rewrites() {
-		return [
-			{
-				source: '/potree.html',
-				destination: '/potree.html',
-			},
-		];
-	},
 	webpack: (config, { dev, isServer }) => {
 		// Keep console.log statements in production builds
 		config.optimization.minimize = true;
