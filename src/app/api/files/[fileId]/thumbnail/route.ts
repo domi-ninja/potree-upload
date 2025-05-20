@@ -72,7 +72,6 @@ export async function GET(
 	
 	try {
 		const response = await s3Client.send(getCommand);
-		console.log(response);
 
 		// Stream the file directly to the client
 		const headers = new Headers();
@@ -87,7 +86,6 @@ export async function GET(
 	
 	} catch (error) {
 		if (error instanceof Error && error.name.includes("NoSuchKey")) {
-			console.log("File not found");
 			return NextResponse.json({ error: "File not found" }, { status: 404 });
 		}
 		

@@ -11,7 +11,6 @@ export default async function AdminPage({
     const isAdmin = await isCurrentUserAdmin();
 
     const { userId } = await params;
-    console.log(userId);
 
     if (!isAdmin) {
         return (
@@ -23,7 +22,6 @@ export default async function AdminPage({
 
     const users = await adminGetAllUsers();
     const user = users.find((user) => user.id === userId);
-    console.log(user);
     const files = await adminGetSomeUserUploads(userId);
 
     return (
