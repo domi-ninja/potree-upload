@@ -1,6 +1,6 @@
 import "server-only";
 import { currentUser } from "@clerk/nextjs/server";
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, and } from "drizzle-orm";
 import { db } from "./db";
 import { uploads } from "./db/schema";
 
@@ -66,7 +66,10 @@ export async function updateFileTitle(uuid: string, title: string) {
 	}
 
 	const file = await db.query.uploads.findFirst({
-		where: eq(uploads.uuid, uuid),
+		where: and(
+			eq(uploads.uuid, uuid),
+			eq(uploads.userId, user.id),
+		),
 	});
 
 	if (!file) {

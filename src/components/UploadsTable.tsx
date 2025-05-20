@@ -128,6 +128,15 @@ export default function UploadsTable({ uploads, admin }: { uploads: FileUpload[]
 
 	const handleEditSave = async (file: FileUpload) => {
 		try {
+
+			// // Update UI immediately (optimistic update)
+			// const updatedUploads = filesList.map((f) =>
+			// 	f.uuid === file.uuid ? { ...f, title: editTitle } : f,
+			// );
+			
+			// setFilesList(updatedUploads);
+			setEditingFile(null);
+			
 			// Make API call to update the title
 			await fetch(`/api/files/${file.uuid}`, {
 				method: "PATCH",
@@ -136,15 +145,7 @@ export default function UploadsTable({ uploads, admin }: { uploads: FileUpload[]
 				},
 				body: JSON.stringify({ title: editTitle }),
 			});
-			
-			// Update UI immediately (optimistic update)
-			const updatedUploads = filesList.map((f) =>
-				f.uuid === file.uuid ? { ...f, title: editTitle } : f,
-			);
-			
-			setFilesList(updatedUploads);
-			setEditingFile(null);
-			
+						
 			// Refresh the page to get updated data from server
 			router.refresh();
 		} catch (error) {

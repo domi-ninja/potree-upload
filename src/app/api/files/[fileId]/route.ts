@@ -59,11 +59,11 @@ export async function PATCH(
 		return NextResponse.json({ error: "Title is required" }, { status: 400 });
 	}
 
-	const fileRecord = await getMyUploadById(fileId);
+	// const fileRecord = await getMyUploadById(fileId);
 
-	if (!fileRecord) {
-		return NextResponse.json({ error: "File not found" }, { status: 404 });
-	}
+	// if (!fileRecord) {
+	// 	return NextResponse.json({ error: "File not found" }, { status: 404 });
+	// }
 
 	await updateFileTitle(fileId, title);
 
