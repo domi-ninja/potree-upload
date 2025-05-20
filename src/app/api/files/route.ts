@@ -4,7 +4,7 @@ import { getMyUploads } from "~/server/queries";
 
 const type = "server-only";
 
-export async function GET(request: Request) {
+export async function GET(request: Request	) {
 	const user = await currentUser();
 
 	if (!user) {
@@ -14,9 +14,4 @@ export async function GET(request: Request) {
 	const files = await getMyUploads();
 
 	return NextResponse.json(files);
-}
-
-
-export function getBucketFileName( uuid:string) {
-	return `${uuid}.json5`;
 }

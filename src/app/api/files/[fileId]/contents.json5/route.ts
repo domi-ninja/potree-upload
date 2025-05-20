@@ -3,19 +3,17 @@ import { currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { BUCKET_NAME, s3Client } from "~/lib/s3";
 import {getMyUploadById } from "~/server/queries";
-import { getBucketFileName } from "../../route";
+import { getBucketFileName } from "~/lib/s3";
 const type = "server-only";
 
 // force dynamic
 export const dynamic = 'force-dynamic';
 
-
-
 export async function GET(
 	request: Request,
-	{ params }: { params: { fileId: string } },
+	{ params }: { params: Promise<{ fileId: string }> }
 ) {
-	const { fileId }  = await params;
+	const { fileId } = await params;
 
 	console.log("fileId", fileId);
 	const fileRecord = await getMyUploadById(fileId);

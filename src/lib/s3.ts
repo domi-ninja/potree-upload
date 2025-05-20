@@ -16,3 +16,7 @@ export const s3Client = new S3Client({
 });
 
 export const BUCKET_NAME = `potree-upload-${env.NODE_ENV}`;
+
+export function getBucketFileName( uuid:string) {
+	return `${uuid}.json5`;
+}

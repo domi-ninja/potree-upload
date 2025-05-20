@@ -6,7 +6,7 @@ import { env } from "~/env";
 import { BUCKET_NAME, s3Client } from "~/lib/s3";
 import { db } from "~/server/db";
 import { uploads } from "~/server/db/schema";
-import { getBucketFileName } from "~/app/api/files/route";
+import { getBucketFileName } from "~/lib/s3";
 const type = "server-only";
 
 function getSafeTitle(userinput: string) {

@@ -5,10 +5,11 @@ import { NextResponse } from "next/server";
 import { currentUser } from "@clerk/nextjs/server";
 import { BUCKET_NAME } from "~/lib/s3";
 import { deleteFile } from "~/server/queries";
-import { getBucketFileName } from "../route";
+import { getBucketFileName } from "~/lib/s3";
+
 export async function DELETE(
 	request: Request,
-	{ params }: { params: { fileId: string } },
+	{ params }: { params: Promise<{ fileId: string }> }
 ) {
 	const user = await currentUser();
 
@@ -42,15 +43,16 @@ export async function DELETE(
 
 export async function PATCH(
 	request: Request,
-	{ params }: { params: { fileId: string } },
+	{ params }: { params: Promise<{ fileId: string }> },
 ) {
+	const { fileId } = await params;
+
 	const user = await currentUser();
 
 	if (!user) {
 		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 	}
 
-	const { fileId } = params;
 	const { title } = await request.json();
 
 	if (!title || typeof title !== 'string') {

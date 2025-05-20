@@ -7,24 +7,20 @@ import "./src/env.js";
 /** @type {import("next").NextConfig} */
 const config = {
     	// build speedup by shittier error messages
-	typescript: {
-		ignoreBuildErrors: true,
-	},
-	eslint: {
-		ignoreDuringBuilds: true,
-	},
-	webpack: (config, { dev, isServer }) => {
-		// Keep console.log statements in production builds
-		config.optimization.minimize = true;
-		if(!dev) {
-			for (const minimizer of config.optimization.minimizer) {
-				if(minimizer.constructor.name === 'TerserPlugin') {
-					minimizer.options.terserOptions.compress.drop_console = false;
-				}
-			}
-		}
-		return config;
-	},
+	// typescript: {
+	// 	ignoreBuildErrors: true,
+	// },
+	// eslint: {
+	// 	ignoreDuringBuilds: true,
+	// },
+
+	// rewrite
+	rewrites: async () => [
+		{
+			source: '/potree/potree.html',
+			destination: '/potree/potree.html',
+		},
+	],
 
 };
 

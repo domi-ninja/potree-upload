@@ -24,7 +24,7 @@ export default async function AdminPage() {
             <h1 className="text-2xl font-bold">Admin Page</h1>
             {users.map((user) => (
                 <div key={user.id} className="m-10 p-4 bg-red-300 rounded-md">
-                    <Link href={`/admin/${user.id}`}>Manage {user.emailAddresses[0].emailAddress}</Link>
+                    <Link href={`/admin/${user.id}`}>Manage {user.emailAddresses[0]?.emailAddress}</Link>
                 </div>
             ))}
         </div>
