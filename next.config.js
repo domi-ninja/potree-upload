@@ -13,6 +13,12 @@ const config = {
 	eslint: {
 		ignoreDuringBuilds: true,
 	},
+	// Ensure all files in the public directory are included in the build
+	output: 'standalone',
+	// Explicitly include public directory assets
+	publicRuntimeConfig: {
+		staticFolder: '/public',
+	},
 	webpack: (config, { dev, isServer }) => {
 		// Keep console.log statements in production builds
 		config.optimization.minimize = true;
@@ -25,6 +31,7 @@ const config = {
 		}
 		return config;
 	},
+
 };
 
 export default config;
