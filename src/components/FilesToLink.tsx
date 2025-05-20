@@ -16,7 +16,7 @@ export default function FilesToLink({
 						file && (
 							<div key={uuid}>
 								<a
-									href={`/files/${file.uuid}`}
+									href={`/potree.html?file=/api/files/${file.uuid}/contents`}
 									className="text-purple-600 hover:text-purple-900"
 								>
 									{file.title || file.uuid}
