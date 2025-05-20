@@ -94,20 +94,18 @@
 
 		viewer.loadProject(file + ".json5");
 
-		// make a thumbnail every second
+		// pray it works approach
 		setTimeout(() => {
-			setInterval(() => {
-				const canvas = document.querySelector("#potree_quick_buttons+canvas")
-				const dataUrl = canvas.toDataURL('image/jpeg');
-				const apiTarget = file.replace("contents", "thumbnail");
-				fetch(apiTarget, {
-					method: "POST",
-					body: JSON.stringify({
-						image: dataUrl
-					}),
-				});
-			}, 10000);
-		}, 5000);
+			const canvas = document.querySelector("#potree_quick_buttons+canvas")
+			const dataUrl = canvas.toDataURL('image/jpeg');
+			const apiTarget = file.replace("contents", "thumbnail");
+			fetch(apiTarget, {
+				method: "POST",
+				body: JSON.stringify({
+					image: dataUrl
+				}),
+			});
+		}, 3000);
 	</script>
 
 
