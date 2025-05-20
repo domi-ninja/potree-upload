@@ -72,10 +72,11 @@ export async function GET(
 	
 	try {
 		const response = await s3Client.send(getCommand);
-	
-			// Stream the file directly to the client
-			const headers = new Headers();
-			headers.set("Content-Type", "image/jpeg");
+		console.log(response);
+
+		// Stream the file directly to the client
+		const headers = new Headers();
+		headers.set("Content-Type", "image/jpeg");
 	
 		// Convert streaming body to array buffer
 		const bodyContents = await response.Body?.transformToByteArray();
@@ -84,16 +85,16 @@ export async function GET(
 			headers,
 		});
 	
-		} catch (error) {
-		
-			if (error instanceof Error && error.message.includes("NoSuchKey")) {
-				return NextResponse.json({ error: "File not found" }, { status: 404 });
-			}
-			
-			console.error("S3 get thumbnail error:", error);
-			return NextResponse.json(
-				{ status: 500 },
-			);
+	} catch (error) {
+		if (error instanceof Error && error.name.includes("NoSuchKey")) {
+			console.log("File not found");
+			return NextResponse.json({ error: "File not found" }, { status: 404 });
 		}
+		
+		console.error("S3 get thumbnail error:", error);
+		return NextResponse.json(
+			{ status: 500 },
+		);
 	}
+}
 	

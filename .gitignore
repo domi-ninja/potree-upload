@@ -45,22 +45,5 @@ yarn-error.log*
 # idea files
 .idea
 PROD_DB_URL.txt
-public/.github
-public/docs
-public/examples
-public/libs
-public/pointclouds
-public/resources
-public/src
-public/.eslintrc
-public/.gitignore
-public/.travis.yml
-public/LICENSE
-public/README.md
-public/gulpfile.js
-public/package-lock.json
-public/package.json
-public/pnpm-lock.yaml
-public/potree.html
-public/rollup.config.js
+
 public/potree

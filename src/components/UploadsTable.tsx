@@ -64,6 +64,7 @@ export default function UploadsTable({ uploads, admin }: { uploads: FileUpload[]
 	const [filesList, setFilesList] = useState<FileUpload[]>(uploads);
 	const inputRef = useRef<HTMLInputElement>(null);
 	const [thumbnailSize, setThumbnailSize] = useState(64);
+	const [imageFallbacks, setImageFallbacks] = useState<{[key: string]: boolean}>({});
 	// Sync filesList with uploads prop when it changes
 	useEffect(() => {
 		setFilesList(uploads);
@@ -316,7 +317,11 @@ export default function UploadsTable({ uploads, admin }: { uploads: FileUpload[]
 										width: `${thumbnailSize}px`,
 										height: `${thumbnailSize}px`
 									}}>
-										<img className="w-full h-full object-cover" src={`/api/files/${file.uuid}/thumbnail`} alt="Thumbnail" />
+										<img 
+											className="w-full h-full object-cover" 
+											src={imageFallbacks[file.uuid] ? "/placeholder-thumbnail.png" : `/api/files/${file.uuid}/thumbnail`}
+											alt={""}
+										/>
 									</div>
 								</td>
 								<td className="whitespace-nowrap">
