@@ -1,15 +1,15 @@
-import { s3Client } from "~/lib/s3";
-import { getMyUploadById, updateFileTitle } from "~/server/queries";
 import { DeleteObjectCommand } from "@aws-sdk/client-s3";
-import { NextResponse } from "next/server";
 import { currentUser } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
+import { s3Client } from "~/lib/s3";
 import { BUCKET_NAME } from "~/lib/s3";
-import { deleteFile } from "~/server/queries";
 import { getBucketFileName } from "~/lib/s3";
+import { getMyUploadById, updateFileTitle } from "~/server/queries";
+import { deleteFile } from "~/server/queries";
 
 export async function DELETE(
 	request: Request,
-	{ params }: { params: Promise<{ fileId: string }> }
+	{ params }: { params: Promise<{ fileId: string }> },
 ) {
 	const user = await currentUser();
 
@@ -26,14 +26,18 @@ export async function DELETE(
 	}
 
 	for (const fileType of ["contents", "thumbnail"]) {
-		
 		try {
-			const fileName = getBucketFileName(fileRecord.uuid.toString(), fileType as "contents" | "thumbnail");
+			const fileName = getBucketFileName(
+				fileRecord.uuid.toString(),
+				fileType as "contents" | "thumbnail",
+			);
 			// delete the file from s3
-			s3Client.send(new DeleteObjectCommand({
-				Bucket: BUCKET_NAME,
-				Key: fileName,
-			}));
+			s3Client.send(
+				new DeleteObjectCommand({
+					Bucket: BUCKET_NAME,
+					Key: fileName,
+				}),
+			);
 		} catch (error) {
 			console.error(error);
 		}
@@ -61,7 +65,7 @@ export async function PATCH(
 
 	const { title } = await request.json();
 
-	if (!title || typeof title !== 'string') {
+	if (!title || typeof title !== "string") {
 		return NextResponse.json({ error: "Title is required" }, { status: 400 });
 	}
 

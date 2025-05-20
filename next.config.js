@@ -6,7 +6,7 @@ import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
 const config = {
-    	// build speedup by shittier error messages
+	// build speedup by shittier error messages
 	typescript: {
 		ignoreBuildErrors: true,
 	},
@@ -21,7 +21,6 @@ const config = {
 	// 		destination: '/potree/:path*',
 	// 	},
 	// ],
-	
 };
 
 export default config;

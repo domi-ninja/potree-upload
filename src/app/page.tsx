@@ -45,7 +45,6 @@ function formatDate(dateString: string | Date): string {
 }
 
 export default async function FilesPage() {
-
 	const user = await currentUser();
 
 	if (!user) {

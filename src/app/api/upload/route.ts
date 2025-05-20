@@ -4,9 +4,9 @@ import { currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { env } from "~/env";
 import { BUCKET_NAME, s3Client } from "~/lib/s3";
+import { getBucketFileName } from "~/lib/s3";
 import { db } from "~/server/db";
 import { uploads } from "~/server/db/schema";
-import { getBucketFileName } from "~/lib/s3";
 const type = "server-only";
 
 function getSafeTitle(userinput: string) {
@@ -28,7 +28,6 @@ function getSafeTitle(userinput: string) {
 	}
 	return title;
 }
-
 
 export async function POST(request: Request) {
 	try {
@@ -57,7 +56,7 @@ export async function POST(request: Request) {
 		};
 
 		// Create a unique filename
-		const fileName = getBucketFileName(upload.uuid.toString(), "contents");   
+		const fileName = getBucketFileName(upload.uuid.toString(), "contents");
 
 		// Create the upload command
 		const uploadCommand = new PutObjectCommand({

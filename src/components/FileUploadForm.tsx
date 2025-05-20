@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 interface UploadResult {
@@ -28,12 +28,12 @@ export default function FileUploadForm({ onUpload }: { onUpload: () => void }) {
 			setFile(selectedFile);
 			setError(null);
 			setUploadResult(null);
-			
+
 			// Trigger upload immediately
 			await uploadFile(selectedFile);
-			
+
 			// Clear file input
-			e.target.value = '';
+			e.target.value = "";
 		}
 	};
 
@@ -46,9 +46,9 @@ export default function FileUploadForm({ onUpload }: { onUpload: () => void }) {
 
 		setUploading(true);
 		setError(null);
-		toast.info(`Uploading ${fileToUpload.name}...`, { 
+		toast.info(`Uploading ${fileToUpload.name}...`, {
 			autoClose: false,
-			toastId: "uploading"
+			toastId: "uploading",
 		});
 
 		try {
@@ -71,7 +71,6 @@ export default function FileUploadForm({ onUpload }: { onUpload: () => void }) {
 			setUploadResult(result);
 			setFile(null); // Clear file selection in state
 			onUpload();
-
 		} catch (err) {
 			const errorMessage = err instanceof Error ? err.message : "Upload failed";
 			toast.dismiss("uploading");
@@ -99,11 +98,10 @@ export default function FileUploadForm({ onUpload }: { onUpload: () => void }) {
 						type="file"
 						id="file"
 						onChange={handleFileChange}
-						className="file:mr-4 file:p-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 w-full text-sm text-slate-500 rounded-md border border-gray-300 bg-gray-50"
+						className="w-full rounded-md border border-gray-300 bg-gray-50 text-slate-500 text-sm file:mr-4 file:rounded-md file:border-0 file:bg-purple-50 file:p-4 file:font-semibold file:text-purple-700 file:text-sm hover:file:bg-purple-100"
 						disabled={uploading}
 					/>
 				</div>
-
 			</form>
 
 			{error && (
@@ -111,7 +109,6 @@ export default function FileUploadForm({ onUpload }: { onUpload: () => void }) {
 					{error}
 				</div>
 			)}
-
 		</div>
 	);
 }

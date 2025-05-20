@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo, useState, useRef, useEffect } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
 	FaCheck,
 	FaPen,
@@ -12,9 +12,9 @@ import {
 	FaSortUp,
 	FaTimes,
 } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
 import FileUploadForm from "./FileUploadForm";
 import FilesToLink from "./FilesToLink";
-import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Helper function to format dates in a readable way
@@ -53,7 +53,10 @@ export type FileUpload = {
 type SortField = "title" | "fileType" | "createdAt";
 type SortDirection = "asc" | "desc";
 
-export default function UploadsTable({ uploads, admin }: { uploads: FileUpload[], admin: boolean }) {
+export default function UploadsTable({
+	uploads,
+	admin,
+}: { uploads: FileUpload[]; admin: boolean }) {
 	const router = useRouter();
 	const [searchTerm, setSearchTerm] = useState("");
 	const [sortField, setSortField] = useState<SortField>("createdAt");
@@ -64,7 +67,9 @@ export default function UploadsTable({ uploads, admin }: { uploads: FileUpload[]
 	const [filesList, setFilesList] = useState<FileUpload[]>(uploads);
 	const inputRef = useRef<HTMLInputElement>(null);
 	const [thumbnailSize, setThumbnailSize] = useState(64);
-	const [imageFallbacks, setImageFallbacks] = useState<{[key: string]: boolean}>({});
+	const [imageFallbacks, setImageFallbacks] = useState<{
+		[key: string]: boolean;
+	}>({});
 	// Sync filesList with uploads prop when it changes
 	useEffect(() => {
 		setFilesList(uploads);
@@ -128,15 +133,14 @@ export default function UploadsTable({ uploads, admin }: { uploads: FileUpload[]
 
 	const handleEditSave = async (file: FileUpload) => {
 		try {
-
 			// // Update UI immediately (optimistic update)
 			// const updatedUploads = filesList.map((f) =>
 			// 	f.uuid === file.uuid ? { ...f, title: editTitle } : f,
 			// );
-			
+
 			// setFilesList(updatedUploads);
 			setEditingFile(null);
-			
+
 			// Make API call to update the title
 			await fetch(`/api/files/${file.uuid}`, {
 				method: "PATCH",
@@ -145,7 +149,7 @@ export default function UploadsTable({ uploads, admin }: { uploads: FileUpload[]
 				},
 				body: JSON.stringify({ title: editTitle }),
 			});
-						
+
 			// Refresh the page to get updated data from server
 			router.refresh();
 		} catch (error) {
@@ -154,10 +158,9 @@ export default function UploadsTable({ uploads, admin }: { uploads: FileUpload[]
 	};
 
 	const handleDeleteFile = async (uuid: string) => {
-	
-		toast.info("Deleting file...", { 
+		toast.info("Deleting file...", {
 			autoClose: false,
-			toastId: "deleting"
+			toastId: "deleting",
 		});
 
 		// call the api to delete the file, no need to use fetch
@@ -171,7 +174,6 @@ export default function UploadsTable({ uploads, admin }: { uploads: FileUpload[]
 		// refresh the page
 		router.refresh();
 	};
-
 
 	const handleDeleteSelectedFiles = async () => {
 		for (const uuid of selectedFiles) {
@@ -211,18 +213,14 @@ export default function UploadsTable({ uploads, admin }: { uploads: FileUpload[]
 		<div>
 			<ToastContainer position="top-center" autoClose={5000} />
 
-			<div className="mb-12 grid grid-cols-1 md:grid-cols-2 gap-4">
-				{ !admin &&
-					<FileUploadForm onUpload={() => router.refresh()} />
-				}
+			<div className="mb-12 grid grid-cols-1 gap-4 md:grid-cols-2">
+				{!admin && <FileUploadForm onUpload={() => router.refresh()} />}
 				<FilesToLink
 					selectedFiles={Array.from(selectedFiles)}
 					uploads={uploads}
 				/>
 			</div>
-			<h2 className="mb-4 font-semibold text-2xl">My Uploads
-
-			</h2>
+			<h2 className="mb-4 font-semibold text-2xl">My Uploads</h2>
 
 			<div className="relative mb-4 flex flex-row space-x-4">
 				<div className="flex-1">
@@ -231,20 +229,20 @@ export default function UploadsTable({ uploads, admin }: { uploads: FileUpload[]
 					</div>
 					<input
 						type="text"
-						className="flex-1 block w-full rounded-lg border border-gray-300 bg-gray-50 pl-10 text-gray-900 text-sm focus:border-purple-500 focus:ring-purple-500 p-2.5"
+						className="block w-full flex-1 rounded-lg border border-gray-300 bg-gray-50 p-2.5 pl-10 text-gray-900 text-sm focus:border-purple-500 focus:ring-purple-500"
 						placeholder="Search files..."
 						value={searchTerm}
 						onChange={(e) => setSearchTerm(e.target.value)}
-					/>	
+					/>
 				</div>
 				<button
 					type="button"
 					disabled={selectedFiles.size === 0}
 					onClick={() => handleDeleteSelectedFiles()}
-					className="flex-1 rounded-lg border border-red-500 bg-gray-50 p-2.5 text-sm text-red-500 hover:bg-gray-100 focus:border-purple-500 focus:ring-purple-500 disabled:opacity-50"
+					className="flex-1 rounded-lg border border-red-500 bg-gray-50 p-2.5 text-red-500 text-sm hover:bg-gray-100 focus:border-purple-500 focus:ring-purple-500 disabled:opacity-50"
 					aria-label="Delete files"
 				>
-					Delete selected 
+					Delete selected
 				</button>
 			</div>
 
@@ -266,8 +264,12 @@ export default function UploadsTable({ uploads, admin }: { uploads: FileUpload[]
 							<th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
 								<button
 									type="button"
-									className="border border-gray-300 rounded-lg p-2 flex items-center focus:outline-none"
-									onClick={() => setThumbnailSize( thumbnailSize>=256 ? 64 : thumbnailSize*2 )}
+									className="flex items-center rounded-lg border border-gray-300 p-2 focus:outline-none"
+									onClick={() =>
+										setThumbnailSize(
+											thumbnailSize >= 256 ? 64 : thumbnailSize * 2,
+										)
+									}
 									aria-label="Increase thumbnail size"
 								>
 									Thumbnail {thumbnailSize}
@@ -301,7 +303,7 @@ export default function UploadsTable({ uploads, admin }: { uploads: FileUpload[]
 							</th>
 						</tr>
 					</thead>
-					
+
 					<tbody className="divide-y divide-gray-200 bg-white">
 						{filteredAndSortedUploads.map((file) => (
 							<tr key={file.uuid} className="hover:bg-gray-50">
@@ -314,13 +316,19 @@ export default function UploadsTable({ uploads, admin }: { uploads: FileUpload[]
 									/>
 								</td>
 								<td className="whitespace-nowrap">
-									<div style={{
-										width: `${thumbnailSize}px`,
-										height: `${thumbnailSize}px`
-									}}>
-										<img 
-											className="w-full h-full object-cover" 
-											src={imageFallbacks[file.uuid] ? "/placeholder-thumbnail.png" : `/api/files/${file.uuid}/thumbnail`}
+									<div
+										style={{
+											width: `${thumbnailSize}px`,
+											height: `${thumbnailSize}px`,
+										}}
+									>
+										<img
+											className="h-full w-full object-cover"
+											src={
+												imageFallbacks[file.uuid]
+													? "/placeholder-thumbnail.png"
+													: `/api/files/${file.uuid}/thumbnail`
+											}
 											alt={""}
 										/>
 									</div>

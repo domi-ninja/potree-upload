@@ -1,9 +1,5 @@
 import "~/styles/globals.css";
 
-import type { Metadata } from "next";
-import { Geist } from "next/font/google";
-import AdminHeader from "~/components/AdminHeader";
-import Link from "next/link";
 import {
 	ClerkProvider,
 	SignInButton,
@@ -13,6 +9,10 @@ import {
 	UserButton,
 	useUser,
 } from "@clerk/nextjs";
+import type { Metadata } from "next";
+import { Geist } from "next/font/google";
+import Link from "next/link";
+import AdminHeader from "~/components/AdminHeader";
 
 export const metadata: Metadata = {
 	title: "potree upload",
@@ -34,9 +34,9 @@ export default function RootLayout({
 		<ClerkProvider>
 			<html lang="en" className={`${geist.variable}`}>
 				<body>
-					<header className="bg-gray-100 h-16 gap-4 p-4 text-2xl">
+					<header className="h-16 gap-4 bg-gray-100 p-4 text-2xl">
 						<div className="container mx-auto px-4">
-							<h1 className="text-2xl font-bold inline-block">
+							<h1 className="inline-block font-bold text-2xl">
 								<Link href="/">Potree Viewer</Link>
 							</h1>
 							<div className="float-right">

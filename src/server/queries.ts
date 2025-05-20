@@ -1,12 +1,10 @@
 import "server-only";
 import { currentUser } from "@clerk/nextjs/server";
-import { desc, eq, and } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { db } from "./db";
 import { uploads } from "./db/schema";
 
-
 export async function getMyUploads(userId: string) {
-
 	const results = await db.query.uploads.findMany({
 		where: eq(uploads.userId, userId),
 		orderBy: desc(uploads.createdAt),
@@ -14,9 +12,7 @@ export async function getMyUploads(userId: string) {
 	return results;
 }
 
-
 export async function adminGetSomeUserUploads(userId: string) {
-
 	if (!userId) {
 		return [];
 	}
@@ -66,17 +62,12 @@ export async function updateFileTitle(uuid: string, title: string) {
 	}
 
 	const file = await db.query.uploads.findFirst({
-		where: and(
-			eq(uploads.uuid, uuid),
-			eq(uploads.userId, user.id),
-		),
+		where: and(eq(uploads.uuid, uuid), eq(uploads.userId, user.id)),
 	});
 
 	if (!file) {
 		throw new Error("File not found");
 	}
 
-	await db.update(uploads)
-		.set({ title })
-		.where(eq(uploads.uuid, uuid));
-}	
+	await db.update(uploads).set({ title }).where(eq(uploads.uuid, uuid));
+}

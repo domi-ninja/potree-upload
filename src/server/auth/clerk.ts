@@ -7,30 +7,30 @@ import type { User } from "@clerk/nextjs/server";
  * This is more secure than client-side checks
  */
 export async function isCurrentUserAdmin(): Promise<boolean> {
-  try {
-    const user = await currentUser();
-    if (!user) return false;
-    if (typeof user.privateMetadata.admin !== 'boolean' ) {
-        return false;
-    }
-    return user.privateMetadata.admin;
-  } catch (error) {
-    console.error("Error verifying admin status:", error);
-    return false;
-  }
-} 
+	try {
+		const user = await currentUser();
+		if (!user) return false;
+		if (typeof user.privateMetadata.admin !== "boolean") {
+			return false;
+		}
+		return user.privateMetadata.admin;
+	} catch (error) {
+		console.error("Error verifying admin status:", error);
+		return false;
+	}
+}
 
 /**
  * Server-side function to get all users from Clerk
  * @returns Promise with array of User objects
  */
 export async function adminGetAllUsers(): Promise<User[]> {
-  try {
-    const client = await clerkClient();
-    const { data, totalCount } = await client.users.getUserList()
-    return data;
-  } catch (error) {
-    console.error("Error fetching users:", error);
-    return [];
-  }
-} 
+	try {
+		const client = await clerkClient();
+		const { data, totalCount } = await client.users.getUserList();
+		return data;
+	} catch (error) {
+		console.error("Error fetching users:", error);
+		return [];
+	}
+}

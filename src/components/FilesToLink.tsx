@@ -6,9 +6,10 @@ export default function FilesToLink({
 }: { selectedFiles: string[]; uploads: FileUpload[] }) {
 	return (
 		<div>
-			<h2 className="mb-2 font-medium text-lg">Links to selected files
-                <span className="text-sm text-gray-500"> (for copy pasting!)</span>
-                </h2>
+			<h2 className="mb-2 font-medium text-lg">
+				Links to selected files
+				<span className="text-gray-500 text-sm"> (for copy pasting!)</span>
+			</h2>
 			<div id="links-to-copy" className="rounded-lg border border-gray-200 p-6">
 				{Array.from(selectedFiles).map((uuid) => {
 					const file = uploads.find((f) => f.uuid === uuid);
