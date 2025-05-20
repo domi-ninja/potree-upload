@@ -19,6 +19,15 @@ const config = {
 	publicRuntimeConfig: {
 		staticFolder: '/public',
 	},
+	// Add rewrites for HTML files in public folder
+	async rewrites() {
+		return [
+			{
+				source: '/potree.html',
+				destination: '/potree.html',
+			},
+		];
+	},
 	webpack: (config, { dev, isServer }) => {
 		// Keep console.log statements in production builds
 		config.optimization.minimize = true;
