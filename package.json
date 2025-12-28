@@ -1,52 +1,52 @@
 {
-	"name": "potree-upload",
-	"version": "0.1.0",
-	"private": true,
-	"type": "module",
-	"scripts": {
-		"build": "next build",
-		"check": "biome check .",
-		"format:unsafe": "biome check --write --unsafe .",
-		"format": "biome check --write .",
-		"dev": "next dev --turbo",
-		"preview": "next build && next start",
-		"start": "next start",
-		"typecheck": "tsc --noEmit",
-		"db:generate": "drizzle-kit generate",
-		"db:migrate": "drizzle-kit migrate",
-		"db:push": "drizzle-kit push",
-		"db:pp": "DATABASE_URL=$(cat ./PROD_DB_URL.txt | head -1 ) drizzle-kit push",
-		"db:local": "drizzle-kit studio",
-		"db:prod": "DATABASE_URL=$(cat ./PROD_DB_URL.txt | head -1 ) drizzle-kit studio"
-	},
-	"dependencies": {
-		"@aws-sdk/client-s3": "^3.812.0",
-		"@aws-sdk/s3-request-presigner": "^3.812.0",
-		"@clerk/nextjs": "^6.19.4",
-		"@t3-oss/env-nextjs": "^0.12.0",
-		"drizzle-orm": "^0.43.1",
-		"next": "^15.2.3",
-		"next-auth": "5.0.0-beta.25",
-		"postgres": "^3.4.5",
-		"react": "^19.0.0",
-		"react-dom": "^19.0.0",
-		"react-icons": "^5.5.0",
-		"react-toastify": "^11.0.5",
-		"zod": "^3.24.2"
-	},
-	"devDependencies": {
-		"@biomejs/biome": "1.9.4",
-		"@tailwindcss/postcss": "^4.0.15",
-		"@types/node": "^20.14.10",
-		"@types/react": "^19.0.0",
-		"@types/react-dom": "^19.0.0",
-		"drizzle-kit": "^0.30.5",
-		"postcss": "^8.5.3",
-		"tailwindcss": "^4.0.15",
-		"typescript": "^5.8.2"
-	},
-	"ct3aMetadata": {
-		"initVersion": "7.39.3"
-	},
-	"packageManager": "pnpm@10.10.0"
+  "name": "potree-upload",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "next build",
+    "check": "biome check .",
+    "format:unsafe": "biome check --write --unsafe .",
+    "format": "biome check --write .",
+    "dev": "next dev --turbo",
+    "preview": "next build && next start",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:pp": "DATABASE_URL=$(cat ./PROD_DB_URL.txt | head -1 ) drizzle-kit push",
+    "db:local": "drizzle-kit studio",
+    "db:prod": "DATABASE_URL=$(cat ./PROD_DB_URL.txt | head -1 ) drizzle-kit studio"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.812.0",
+    "@aws-sdk/s3-request-presigner": "^3.812.0",
+    "@clerk/nextjs": "^6.19.4",
+    "@t3-oss/env-nextjs": "^0.12.0",
+    "drizzle-orm": "^0.43.1",
+    "next": "15.2.8",
+    "next-auth": "5.0.0-beta.25",
+    "postgres": "^3.4.5",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-icons": "^5.5.0",
+    "react-toastify": "^11.0.5",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@tailwindcss/postcss": "^4.0.15",
+    "@types/node": "^20.14.10",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "drizzle-kit": "^0.30.5",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.0.15",
+    "typescript": "^5.8.2"
+  },
+  "ct3aMetadata": {
+    "initVersion": "7.39.3"
+  },
+  "packageManager": "pnpm@10.10.0"
 }
