@@ -1,3 +1,7 @@
+<!-- moved-to-codeberg -->
+> This repository moved to [Codeberg](https://codeberg.org/domi-ninja/potree-upload).
+>
+> I moved off GitHub because it became unreliable after the Microsoft acquisition.
 # potree-upload
 
 ## a simple wrapper around the cool [potree](https://github.com/potree/potree) repo to help manage a library of potree scans
